@@ -1,0 +1,22 @@
+%h2= "Richest Address (Top #{@top})"
+%table.table.table-hover
+  %thead
+    %tr
+      %th Rank
+      %th Address
+      %th Amount
+      %th Percent of coins
+  %tbody
+    - @top_list.each_with_index do |row, index|
+      %tr
+        %td.text-right= (index + 1)
+        %td= link_to_address row['address']
+        %td #{coin_amount row['balance']} #{coin_tag}
+        %td #{coin_percent row['balance']} %
+    %tr
+      %td 
+      %td{colspan: 3}
+        - if @top === 20
+          %a{href: url("/top50")} Show Top 50
+        - else
+          %a{href: url("/top20")} Show Top 20

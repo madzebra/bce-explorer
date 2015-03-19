@@ -1,0 +1,19 @@
+- if @address_info.nil?
+  %h2 Address Not Found
+- else
+  %h2 Details for Address
+  %table.table
+    %tr
+      %td Address
+      %td= @address_info['address']
+    %tr
+      %td Balance
+      %td #{coin_amount @address_info['balance']} #{coin_tag}
+    %tr
+      %td Percent of coins
+      %td #{coin_percent @address_info['balance']} %
+    %tr
+      %td Transactions
+      %td= @address_info['tx_count']
+
+  = partial :tx_list, locals: {tx_info: @address_info['tx'], title: "Last 20 transactions"}

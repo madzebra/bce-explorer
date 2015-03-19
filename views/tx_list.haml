@@ -1,0 +1,36 @@
+%h2= title
+- if tx_info.nil?
+  %p No transactions found
+- else
+  %table.table#transactions
+    %thead
+      %tr
+        %th Hash
+        %th From (Amount)
+        %th To (Amount)
+    %tbody
+      - tx_info.each do |tx|
+        %tr
+          %td= link_to_tx_short tx['txid']
+          %td
+            %table.tx-detail-table
+              %tbody
+                - tx['inputs'].each do |input|
+                  %tr
+                    %td
+                      - if input['address'].include? "Generation"
+                        = input['address']
+                      - else
+                        = link_to_address input['address']
+                    %td.amount= "#{coin_amount input['value']} #{coin_tag}" unless input['address'].include? "Generation"
+          %td
+            %table.tx-detail-table
+              %tbody
+                - tx['outputs'].each do |output|
+                  %tr
+                    - if output['address'] == "stake"
+                      %td Included in following transaction(s)
+                    - else
+                      %td
+                        = link_to_address output['address']
+                    %td.amount #{coin_amount output['value']} #{coin_tag}

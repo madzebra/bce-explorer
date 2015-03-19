@@ -1,0 +1,28 @@
+- if @block_info.empty? || @block_info['previousblockhash'].nil?
+  %h2 Block Not Found
+- else
+  %h2 Details for Block ##{@block_info['height']}#{' (Genesis)' if @block_info['height'] == 1}
+  %table.table#details
+    %tr
+      %td Hash
+      %td
+        - unless @block_info['height'] == 1
+          %a{href: to_block(@block_info['previousblockhash']), title: 'previous block'}
+            %span.glyphicon.glyphicon-chevron-left
+        %code= @block_info['hash']
+        - if @block_count > @block_info['height'].to_i
+          %a{href: to_block(@block_info['nextblockhash']), title: 'next block'}
+            %span.glyphicon.glyphicon-chevron-right
+    %tr
+      %td Date/Time
+      %td
+        = human_time @block_info['time']
+        =" <i>extracted by Proof of Stake</i>" if @block_info['flags'].include? 'proof-of-stake'
+    %tr
+      %td Difficulty
+      %td= @block_info['difficulty']
+    %tr
+      %td Transactions
+      %td= @block_info['tx'].length
+
+  = partial :tx_list, locals: {tx_info: @block_info['tx'], title: 'Transactions'}
