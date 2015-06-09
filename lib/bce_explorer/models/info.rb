@@ -6,17 +6,12 @@ module BceExplorer
     end
 
     def blocks
-      result = @info.find_one(type: :proccessed_blocks)
-      result.nil? ? 0 : result['blockcount']
+      result = @info.find_one(_id: 'blockcount')
+      result.nil? ? 0 : result['count'].to_i
     end
 
     def blocks=(count)
-      result = @info.find_one(type: :proccessed_blocks)
-      if result.nil?
-        @info.insert(blockcount: count, type: :proccessed_blocks)
-      else
-        @info.update({ _id: result['_id'] }, '$set' => { blockcount: count })
-      end
+      @info.update({ _id: 'blockcount' }, { count: count }, { upsert: true })
     end
   end
 end
