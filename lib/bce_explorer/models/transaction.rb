@@ -7,13 +7,13 @@ module BceExplorer
 
     # add transaction
     def <<(tx)
-      info = { txid: tx['txid'], tx: tx }
-      @tx_list.insert(info) if @tx_list.find_one(txid: tx['txid']).nil?
+      new_tx = { _id: tx['txid'], tx: tx }
+      @tx_list.insert(new_tx) if @tx_list.find_one(_id: tx['txid']).nil?
     end
 
     # get transaction
     def [](txid)
-      result = @tx_list.find_one(txid: txid)
+      result = @tx_list.find_one(_id: txid)
       result.nil? ? nil : result['tx']
     end
   end
