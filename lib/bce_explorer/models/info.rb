@@ -11,7 +11,8 @@ module BceExplorer
     end
 
     def blocks=(count)
-      @info.update({ _id: 'blockcount' }, { count: count }, { upsert: true })
+      new_count = { _id: 'blockcount', count: count }
+      @info.update({ _id: 'blockcount' }, new_count, upsert: true)
     end
   end
 end

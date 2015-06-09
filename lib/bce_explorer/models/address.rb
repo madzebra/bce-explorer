@@ -15,7 +15,8 @@ module BceExplorer
 
     # set balance
     def []=(address, balance)
-      @addr.update({ _id: address }, { balance: balance }, { upsert: true })
+      new_balance = { _id: address, balance: balance }
+      @addr.update({ _id: address }, new_balance, upsert: true)
     end
 
     def add_tx(info)
@@ -24,7 +25,9 @@ module BceExplorer
     end
 
     def info(address)
-      balance, tx_count, tx = 0.0, 0, nil
+      balance = 0.0
+      tx_count = 0
+      tx = nil
       unless nonexisting_address? address
         balance = self[address]
         tx_count = @addr_tx.find(address: address).count
