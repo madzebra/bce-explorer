@@ -7,7 +7,7 @@ module BceExplorer
 
     def blocks
       result = @info.find_one(_id: 'blockcount')
-      result.nil? ? 0 : result['count'].to_i
+      result.nil? ? 0 : result['count']
     end
 
     def blocks=(count)
