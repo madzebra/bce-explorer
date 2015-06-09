@@ -9,19 +9,13 @@ module BceExplorer
 
     # get balance
     def [](address)
-      result = @addr.find_one(address: address)
+      result = @addr.find_one(_id: address)
       result.nil? ? 0.0 : result['balance']
     end
 
     # set balance
     def []=(address, balance)
-      result = @addr.find_one(address: address)
-      if result.nil?
-        @addr.insert(address: address, balance: balance)
-      else
-        @addr.update({ _id: result['_id'] }, '$set' => { balance: balance })
-      end
-      balance
+      @addr.update({ _id: address }, { balance: balance }, { upsert: true })
     end
 
     def add_tx(info)
@@ -52,7 +46,7 @@ module BceExplorer
     end
 
     def nonexisting_address?(address)
-      @addr.find_one(address: address).nil?
+      @addr.find_one(_id: address).nil?
     end
   end
 end
