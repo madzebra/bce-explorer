@@ -30,7 +30,7 @@ module BceExplorer
       tx = nil
       unless nonexisting_address? address
         balance = self[address]
-        tx_count = @addr_tx.find(address: address).count
+        tx_count = @addr_tx.count(address: address)
         tx = find_tx(address).map { |txid| @tx[txid] }.reject(&:nil?)
       end
       { 'address' => address, 'balance' => balance,
