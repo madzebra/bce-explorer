@@ -37,10 +37,10 @@ module BceExplorer
       end
     end
 
-    def sync_wallets(tx)      
-      addresses = tx['inputs'].
-        map {|inp| inp['address']}.
-        reject {|a| a.include? 'Generation'}
+    def sync_wallets(tx)
+      addresses = tx['inputs']
+        .map { |inp| inp['address'] }
+        .reject { |a| a.include? 'Generation' }
 
       @db.wallet.merge addresses unless addresses.empty?
     end
