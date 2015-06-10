@@ -11,15 +11,15 @@
       %td #{coin_amount @address_info['balance']} #{coin_tag}
     %tr
       %td Guesstimated Wallet
-      - if @address_info['guess_wallet_size'] == 0
+      - if @address_info['wallet_knowns'] == 0
         %td none
       - else
         %td
-          %a{href: url("/wallet/#{@address_info['guess_wallet_id']}")}
-            - if @address_info['guess_wallet_size'] == 1
+          %a{href: url("/wallet/#{@address_info['wallet_id']}")}
+            - if @address_info['wallet_knowns'] == 1
               one address
             - else
-              #{@address_info['guess_wallet_size']} addresses
+              #{@address_info['wallet_knowns']} addresses
     %tr
       %td Percent of coins
       %td #{coin_percent @address_info['balance']} %

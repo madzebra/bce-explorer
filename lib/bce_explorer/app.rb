@@ -43,17 +43,17 @@ module BceExplorer
       haml :tx
     end
 
-    get '/wallet/:cluster_id' do
+    get '/wallet/:wallet_id' do
       @wallet_balance = 0.0
       @wallet_info = nil
-      info = @db.wallet.info params['cluster_id']
+      info = @db.address.wallet_info params['wallet_id']
       unless info.nil?
         @wallet_info = info.map do |a|
+          @wallet_balance += a['balance']
           { address: a['_id'], balance: a['balance'] }
         end
-        @wallet_info.each { |a| @wallet_balance += a[:balance] }
       end
-      @wallet_known = @db.wallet.known params['cluster_id']
+      @wallet_knowns = @db.address.wallet_known_count params['wallet_id']
       haml :wallet
     end
 

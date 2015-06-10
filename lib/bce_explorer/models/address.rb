@@ -55,7 +55,7 @@ module BceExplorer
 
     def info(address)
       info = { 'address' => address, 'balance' => 0.0,
-               'wallet_id' => '', 'wallet_known' => 0,
+               'wallet_id' => '', 'wallet_knowns' => 0,
                'tx_count' => 0, 'tx' => nil }
       info = known_address_info(address) if known_address? address
       info
@@ -75,13 +75,13 @@ module BceExplorer
       tx_count = @addr_tx.count address: address
       tx = find_tx(address).map { |txid| @tx[txid] }.compact
       { 'address' => address, 'balance' => balance,
-        'wallet_id' => wid, 'wallet_known' => wsize,
+        'wallet_id' => wid, 'wallet_knowns' => wsize,
         'tx_count' => tx_count, 'tx' => tx }
     end
 
     def wallet_id(address)
       query = address.is_a?(Array) ? { '$in' => address } : address
-      address = find_one _id: query
+      address = find_one query
       address.nil? ? SecureRandom.hex(8) : address['wallet']
     end
 
