@@ -11,9 +11,9 @@ module BceExplorer
     # collection: addresses
     # get balance
     def [](address)
-      address = find_one address
-      balance = address['balance'] unless address.nil?
-      balance ||= 0.0
+      result = find_one address
+      balance = result['balance'] unless result.nil?
+      balance ||= 0.0 # for situations when address exists w/o balance record
     end
 
     # set balance
