@@ -1,73 +1,108 @@
 module BceExplorer
-  # Address balance storage
+  # Address balance
+  # and guess wallet storage
   class Address
     def initialize(dbh)
       @addr = dbh['addresses']
       @addr_tx = dbh['address_tx']
-      @wallets = dbh['wallets']
       @tx = Transaction.new dbh
     end
 
+    # collection: addresses
     # get balance
     def [](address)
-      result = @addr.find_one(_id: address)
-      result.nil? ? 0.0 : result['balance']
+      address = find_one address
+      address.nil? ? 0.0 : address['balance']
     end
 
     # set balance
     def []=(address, balance)
-      new_balance = { _id: address, balance: balance }
-      @addr.update({ _id: address }, new_balance, upsert: true)
+      query = { _id: address }
+      update = { '$set' => { balance: balance } }
+      upsert query, update
     end
 
-    def add_tx(info)
-      return unless info.keys == [:address, :txid]
-      @addr_tx.insert(info) if @addr_tx.find_one(info).nil?
-    end
+    def wallet_merge(addresses)
+      update = { '$set' => { wallet: wallet_id(addresses) } }
 
-    def info(address)
-      balance = 0.0
-      tx_count = 0
-      tx = nil
-      guess_wallet_count = 0
-      guess_wallet_id = ''
-      unless nonexisting_address? address
-        balance = self[address]
-        wallet_size = guess_wallet_size address
-        wallet_id = guess_wallet_id address
-        tx_count = @addr_tx.count address: address
-        tx = find_tx(address).map { |txid| @tx[txid] }.reject(&:nil?)
+      if addresses.is_a? Array
+        addresses.each { |address| upsert({ _id: address }, update) }
+      else
+        upsert({ _id: addresses }, update)
       end
-      { 'address' => address, 'balance' => balance,
-        'guess_wallet_size' => wallet_size,
-        'guess_wallet_id' => wallet_id,
-        'tx_count' => tx_count, 'tx' => tx }
+    end
+
+    def wallet_info(wallet)
+      addresses = @addresses.find wallet: wallet
+      return nil if addresses.nil?
+      find_top_nz addresses.map { |a| a['_id'] }
+    end
+
+    def wallet_known_count(wallet)
+      @addresses.count query: { wallet: wallet }
     end
 
     def top(count)
-      @addr.find
-        .sort(balance: :desc)
-        .limit count
+      @addresses.find.sort(balance: :desc).limit count
+    end
+
+    # collection: address_tx
+    def add_tx(info)
+      return unless info.keys == [:address, :txid]
+      @addr_tx.update info, info, upsert: true
+    end
+
+    def info(address)
+      info = { 'address' => address, 'balance' => 0.0,
+               'wallet_id' => '', 'wallet_known' => 0,
+               'tx_count' => 0, 'tx' => nil }
+      info = known_address_info(address) if known_address? address
+      info
     end
 
     private
 
+    # collection: addresses
+    def known_address?(address)
+      !find_one(address).nil?
+    end
+
+    def known_address_info(address)
+      balance = self[address]
+      wid = wallet_id address
+      wsize = wallet_known_count wid
+      tx_count = @addr_tx.count address: address
+      tx = find_tx(address).map { |txid| @tx[txid] }.compact
+      { 'address' => address, 'balance' => balance,
+        'wallet_id' => wid, 'wallet_known' => wsize,
+        'tx_count' => tx_count, 'tx' => tx }
+    end
+
+    def wallet_id(address)
+      query = address.is_a?(Array) ? { '$in' => addresses } : address
+      address = find_one _id: query
+      address.nil? ? SecureRandom.hex(8) : address['wallet']
+    end
+
+    def find_one(address)
+      @addresses.find_one _id: address
+    end
+
+    # upsert address
+    def upsert(query, update)
+      @addresses.update query, update, upsert: true
+    end
+
+    # find top non-zero address' balances
+    def find_top_nz(addresses = [], count = 100)
+      query = { _id: { '$in' => addresses }, balance: { '$gt' => 1e-8 } }
+      @addresses.find(query).sort(balance: :desc).limit count
+    end
+
+    # collection: address_tx
     def find_tx(address)
       tx = @addr_tx.find(address: address).sort(_id: :desc).limit(20)
       tx.nil? ? [] : tx.map { |row| row['txid'] }
-    end
-
-    def nonexisting_address?(address)
-      @addr.find_one(_id: address).nil?
-    end
-
-    def guess_wallet_id(address)
-      wallet = @wallets.find_one _id: address
-      wallet.nil? ? '' : wallet['cluster_id']
-    end
-
-    def guess_wallet_size(address)
-      @wallets.count query: { cluster_id: guess_wallet_id(address) }
     end
   end
 end
