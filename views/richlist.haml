@@ -10,11 +10,11 @@
     - @top_list.each_with_index do |row, index|
       %tr
         %td.text-right= (index + 1)
-        %td= link_to_address row['address']
+        %td= link_to_address row['_id']
         %td #{coin_amount row['balance']} #{coin_tag}
         %td #{coin_percent row['balance']} %
     %tr
-      %td 
+      %td
       %td{colspan: 3}
         - if @top === 20
           %a{href: url("/top50")} Show Top 50

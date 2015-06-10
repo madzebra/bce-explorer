@@ -4,6 +4,7 @@ module BceExplorer
     def initialize(dbh)
       @addr = dbh['addresses']
       @addr_tx = dbh['address_tx']
+      @wallets = dbh['wallets']
       @tx = Transaction.new dbh
     end
 
@@ -28,17 +29,25 @@ module BceExplorer
       balance = 0.0
       tx_count = 0
       tx = nil
+      guess_wallet_count = 0
+      guess_wallet_id = ''
       unless nonexisting_address? address
         balance = self[address]
-        tx_count = @addr_tx.count(address: address)
+        wallet_size = guess_wallet_size address
+        wallet_id = guess_wallet_id address
+        tx_count = @addr_tx.count address: address
         tx = find_tx(address).map { |txid| @tx[txid] }.reject(&:nil?)
       end
       { 'address' => address, 'balance' => balance,
+        'guess_wallet_size' => wallet_size,
+        'guess_wallet_id' => wallet_id,
         'tx_count' => tx_count, 'tx' => tx }
     end
 
     def top(count)
-      @addr.find.sort(balance: :desc).limit(count)
+      @addr.find
+        .sort(balance: :desc)
+        .limit count
     end
 
     private
@@ -50,6 +59,15 @@ module BceExplorer
 
     def nonexisting_address?(address)
       @addr.find_one(_id: address).nil?
+    end
+
+    def guess_wallet_id(address)
+      wallet = @wallets.find_one _id: address
+      wallet.nil? ? '' : wallet['cluster_id']
+    end
+
+    def guess_wallet_size(address)
+      @wallets.count query: { cluster_id: guess_wallet_id(address) }
     end
   end
 end

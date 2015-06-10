@@ -1,0 +1,23 @@
+- if @wallet_info.nil?
+  %h2 Wallet Not Found
+- else
+  %h2 Guesstimated Wallet
+  %table.table
+    %tr
+      %td Balance
+      %td #{coin_amount @wallet_balance} #{coin_tag}
+    %tr
+      %td Addresses
+      %td #{@wallet_info.count} with non zero-balance<br />#{@wallet_known} known
+
+  %h2 Addresses with non-zero balance
+  %table.table
+    %thead
+      %tr
+        %th Addresses
+        %th Balance
+    %tbody
+      - @wallet_info.each do |address|
+        %tr
+          %td= link_to_address address[:address]
+          %td.amount #{coin_amount address[:balance]} #{coin_tag}

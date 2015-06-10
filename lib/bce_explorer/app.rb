@@ -43,6 +43,20 @@ module BceExplorer
       haml :tx
     end
 
+    get '/wallet/:cluster_id' do
+      @wallet_balance = 0.0
+      @wallet_info = nil
+      info = @db.wallet.info params['cluster_id']
+      unless info.nil?
+        @wallet_info = info.map do |a|
+          { address: a['_id'], balance: a['balance'] }
+        end
+        @wallet_info.each { |a| @wallet_balance += a[:balance] }
+      end
+      @wallet_known = @db.wallet.known params['cluster_id']
+      haml :wallet
+    end
+
     get '/search' do
       if params['q'].is_a? String # in case of: /search?q[]=foo
         query = params['q'].strip
