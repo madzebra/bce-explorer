@@ -3,7 +3,7 @@ module BceExplorer
   # and guess wallet storage
   class Address
     def initialize(dbh)
-      @addr = dbh['addresses']
+      @addresses = dbh['addresses']
       @addr_tx = dbh['address_tx']
       @tx = Transaction.new dbh
     end
@@ -12,7 +12,8 @@ module BceExplorer
     # get balance
     def [](address)
       address = find_one address
-      address.nil? ? 0.0 : address['balance']
+      balance = address['balance'] unless address.nil?
+      balance ||= 0.0
     end
 
     # set balance
@@ -79,7 +80,7 @@ module BceExplorer
     end
 
     def wallet_id(address)
-      query = address.is_a?(Array) ? { '$in' => addresses } : address
+      query = address.is_a?(Array) ? { '$in' => address } : address
       address = find_one _id: query
       address.nil? ? SecureRandom.hex(8) : address['wallet']
     end

@@ -42,7 +42,11 @@ module BceExplorer
         .map { |inp| inp['address'] }
         .reject { |a| a.include? 'Generation' }
 
-      @db.wallet.merge addresses unless addresses.empty?
+      @db.address.wallet_merge addresses unless addresses.empty?
+
+      tx['outputs'].each do |outp|
+        @db.address.wallet_merge outp['address'] unless outp['address'] == 'stake'
+      end
     end
   end
 end
