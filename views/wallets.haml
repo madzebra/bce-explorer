@@ -1,0 +1,16 @@
+%h2 Largest Guesstimated Wallets
+%table.table.table-hover#largest-wallets
+  %thead
+    %tr
+      %th Rank
+      %th Name
+      %th Addresses
+      %th Balance
+  %tbody
+    - @wallets.each_with_index do |wallet, index|
+      %tr
+        %td.text-right= (index + 1)
+        %td
+          %a{href: url("/wallet/#{wallet[:id]}")}= wallet[:name]
+        %td= wallet[:addresses]
+        %td #{coin_amount wallet[:balance]} #{coin_tag}

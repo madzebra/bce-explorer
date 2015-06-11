@@ -77,6 +77,18 @@ module BceExplorer
       top 50
     end
 
+    get '/wallets' do
+      info = @db.address.largest_wallets
+      @wallets = info.map do |wallet|
+        {
+          id: wallet['_id'],
+          name: @db.address.wallet_name(wallet['_id']),
+          addresses: @db.address.wallet_known_count(wallet['_id']),
+          balance: wallet['total'] }
+      end
+      haml :wallets
+    end
+
     get '/about' do
       haml :about
     end

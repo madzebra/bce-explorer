@@ -39,8 +39,21 @@ module BceExplorer
       find_top_nz addresses.map { |a| a['_id'] }
     end
 
+    def wallet_name(wallet)
+      info = @addresses.find(wallet: wallet).sort(balance: :desc).limit 1
+      info.nil? ? wallet : info.map { |wallet| wallet['_id'] }.first
+    end
+
     def wallet_known_count(wallet)
       @addresses.count query: { wallet: wallet }
+    end
+
+    def largest_wallets
+      @addresses.aggregate([
+        { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
+        { '$sort' => { total: -1 } },
+        { '$limit' => 20 }
+        ])
     end
 
     def top(count)
