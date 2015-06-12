@@ -21,16 +21,16 @@
           %th Connections
           %td= @network_info['connections']
 
-        - unless @network_info['difficulty']
+        - unless @network_info['difficulty'].nil?
           %tr
-            %th Difficulty
+            %th.text-right Difficulty
             %td
           %tr
             %th proof-of-work
-            %td= @network_info['proof-of-work']
+            %td= @network_info['difficulty']['proof-of-work']
           %tr
             %th proof-of-stake
-            %td= @network_info['proof-of-stake']
+            %td= @network_info['difficulty']['proof-of-stake']
 
   .col-md-6
     %h2 Node List
