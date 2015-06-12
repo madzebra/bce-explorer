@@ -1,0 +1,42 @@
+.row
+  .col-md-6
+    %h2 Network Information
+    - if @network_info.nil?
+      %p couldn't get information
+    - else
+      %table.table
+        %tr
+          %th Version
+          %td= @network_info['version']
+        %tr
+          %th Protocol Version
+          %td= @network_info['protocolversion']
+        %tr
+          %th Blocks
+          %td= @network_info['blocks']
+        %tr
+          %th Money Supply
+          %td= @network_info['moneysupply']
+        %tr
+          %th Connections
+          %td= @network_info['connections']
+
+        - unless @network_info['difficulty']
+          %tr
+            %th Difficulty
+            %td
+          %tr
+            %th proof-of-work
+            %td= @network_info['proof-of-work']
+          %tr
+            %th proof-of-stake
+            %td= @network_info['proof-of-stake']
+
+  .col-md-6
+    %h2 Node List
+    %textarea.form-control{rows: 15, readonly: true, style: 'cursor:text'}
+      - if @network_peer.nil?
+        none
+      - else
+        - @network_peer.each do |peer|
+          = "addnode=#{peer['addr']}\n"

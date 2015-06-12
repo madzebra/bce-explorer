@@ -89,6 +89,12 @@ module BceExplorer
       haml :wallets
     end
 
+    get '/network' do
+      @network_info = @client.network_info
+      @network_peer = @client.network_peer_info
+      haml :network
+    end
+
     get '/about' do
       haml :about
     end
