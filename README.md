@@ -1,6 +1,6 @@
 # Block Chain Explorer for altcoins
 
-Block Chain Explorer for altcoins. Works as an application for one coin project
+Block Chain Explorer for altcoins. Works as stand-alone application for a one coin project. See Usage section.
 
 Extracted from BCE project.
 
@@ -22,10 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-simple dump example application
+Simple application example
 
 ```ruby
-# config
+# config.ru
 require 'rubygems'
 require 'bundler/setup'
 require 'yaml'
