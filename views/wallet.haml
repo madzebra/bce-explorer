@@ -15,10 +15,14 @@
   %table.table
     %thead
       %tr
+        %th #
         %th Addresses
         %th Balance
+        %th Percent of coins
     %tbody
-      - @wallet_info.each do |address|
+      - @wallet_info.each_with_index do |address, index|
         %tr
+          %td.text-right= (index + 1)
           %td= link_to_address address[:address]
-          %td.amount #{coin_amount address[:balance]} #{coin_tag}
+          %td #{coin_amount address[:balance]} #{coin_tag}
+          %td #{coin_percent address[:balance]} %
