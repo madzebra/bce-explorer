@@ -10,9 +10,7 @@ module BceExplorer
     def sync!
       ((@db.info.blocks + 1)..@be.block.count).each do |blk_num|
         @be.block(blk_num).decode_with_tx['tx'].each do |tx|
-          sync_wallets tx
-          sync_inputs tx
-          sync_outputs tx
+          sync_addresses tx
           @db.transaction << tx
         end
         @db.info.blocks = blk_num
@@ -20,6 +18,12 @@ module BceExplorer
     end
 
     private
+
+    def sync_addresses(tx)
+      sync_wallets tx
+      sync_inputs tx
+      sync_outputs tx
+    end
 
     def sync_inputs(tx)
       tx['inputs'].each do |input|
