@@ -31,22 +31,28 @@ module BceExplorer
 
     def sync_outputs(tx)
       tx['outputs'].each do |output|
-        next if output['address'] == 'stake'
+        next if stake? output['address']
         @db.address[output['address']] += output['value'].to_f
         @db.address.add_tx address: output['address'], txid: tx['txid']
       end
     end
 
     def sync_wallets(tx)
-      addresses = tx['inputs']
+      addresses = extract_addresses_from tx['inputs']
+      @db.address.wallet_merge addresses unless addresses.empty?
+      tx['outputs'].each do |outp|
+        @db.address.wallet_merge outp['address'] unless stake? outp['address']
+      end
+    end
+
+    def extract_addresses_from(source)
+      source
         .map { |inp| inp['address'] }
         .reject { |a| a.include? 'Generation' }
+    end
 
-      @db.address.wallet_merge addresses unless addresses.empty?
-
-      tx['outputs'].each do |outp|
-        @db.address.wallet_merge outp['address'] unless outp['address'] == 'stake'
-      end
+    def stake?(address)
+      address == 'stake'
     end
   end
 end

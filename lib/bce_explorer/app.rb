@@ -45,7 +45,6 @@ module BceExplorer
 
     get '/wallet/:wallet_id' do
       @wallet_balance = 0.0
-      @wallet_info = nil
       info = @db.address.wallet_info params['wallet_id']
       unless info.nil?
         @wallet_info = info.map do |a|

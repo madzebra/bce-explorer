@@ -13,7 +13,9 @@ module BceExplorer
     def [](address)
       result = find_one address
       balance = result['balance'] unless result.nil?
-      balance ||= 0.0 # for situations when address exists w/o balance record
+      # this code for situations when address document exists
+      # but has no 'balance' property yet, because wallet upserted it
+      balance || 0.0
     end
 
     # set balance
@@ -34,14 +36,14 @@ module BceExplorer
     end
 
     def wallet_info(wallet)
-      addresses = @addresses.find wallet: wallet
-      return nil if addresses.nil?
-      find_top_nz addresses.map { |a| a['_id'] }
+      addresses = @addresses.find(wallet: wallet).map { |a| a['_id'] }
+      # find top addresses with non-zero balance
+      find_top_nz addresses
     end
 
     def wallet_name(wallet)
       info = @addresses.find(wallet: wallet).sort(balance: :desc).limit 1
-      info.nil? ? wallet : info.map { |wallet| wallet['_id'] }.first
+      info.map { |address| address['_id'] }.first || wallet
     end
 
     def wallet_known_count(wallet)
@@ -53,7 +55,7 @@ module BceExplorer
         { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
         { '$sort' => { total: -1 } },
         { '$limit' => 20 }
-        ])
+      ])
     end
 
     def top(count)
@@ -98,6 +100,7 @@ module BceExplorer
       address.nil? ? SecureRandom.hex(8) : address['wallet']
     end
 
+    # return result or return nil
     def find_one(address)
       @addresses.find_one _id: address
     end
@@ -115,8 +118,11 @@ module BceExplorer
 
     # collection: address_tx
     def find_tx(address)
-      tx = @addr_tx.find(address: address).sort(_id: :desc).limit(20)
-      tx.nil? ? [] : tx.map { |row| row['txid'] }
+      @addr_tx
+        .find(address: address)
+        .sort(_id: :desc)
+        .limit(20)
+        .map { |row| row['txid'] }
     end
   end
 end
