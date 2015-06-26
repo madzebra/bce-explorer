@@ -1,18 +1,19 @@
 module BceExplorer
-  # Info blocks db storage
-  class Info
+  # info blocks db storage
+  class Info < Base
     def initialize(dbh)
-      @info = dbh['info']
+      super dbh
     end
 
     def blocks
-      result = @info.find_one(_id: 'blockcount')
+      result = find_one 'blockcount'
       result.nil? ? 0 : result['count']
     end
 
     def blocks=(count)
-      new_count = { _id: 'blockcount', count: count }
-      @info.update({ _id: 'blockcount' }, new_count, upsert: true)
+      query = { _id: 'blockcount' }
+      update = { '$set' => { count: count } }
+      upsert query, update
     end
   end
 end

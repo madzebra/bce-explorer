@@ -27,36 +27,42 @@ module BceExplorer
 
     def sync_inputs(tx)
       tx['inputs'].each do |input|
-        next if input['address'].include? 'Generation'
-        @db.address[input['address']] -= input['value'].to_f
-        @db.address.add_tx address: input['address'], txid: tx['txid']
+        address = input['address']
+        next if generation? address
+        @db.address[address] -= input['value'].to_f
+        @db.tx_address << { address: address, txid: tx['txid'] }
       end
     end
 
     def sync_outputs(tx)
       tx['outputs'].each do |output|
-        next if stake? output['address']
-        @db.address[output['address']] += output['value'].to_f
-        @db.address.add_tx address: output['address'], txid: tx['txid']
+        address = output['address']
+        next if stake? address
+        @db.address[address] += output['value'].to_f
+        @db.tx_address << { address: address, txid: output['txid'] }
       end
     end
 
     def sync_wallets(tx)
       addresses = extract_addresses_from tx['inputs']
-      @db.address.wallet_merge addresses unless addresses.empty?
-      tx['outputs'].each do |outp|
-        @db.address.wallet_merge outp['address'] unless stake? outp['address']
-      end
+      @db.wallet.merge! addresses
+
+      extract_addresses_from(tx['outputs'])
+        .each { @db.wallet.merge! address }
     end
 
     def extract_addresses_from(source)
       source
-        .map { |inp| inp['address'] }
-        .reject { |a| a.include? 'Generation' }
+        .map { |row| row['address'] }
+        .reject { |address| generation?(address) || stake?(address) }
     end
 
     def stake?(address)
       address == 'stake'
+    end
+
+    def generation?(address)
+      address.include? 'Generation'
     end
   end
 end

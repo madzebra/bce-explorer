@@ -45,14 +45,11 @@ module BceExplorer
 
     get '/wallet/:wallet_id' do
       @wallet_balance = 0.0
-      info = @db.address.wallet_info params['wallet_id']
-      unless info.nil?
-        @wallet_info = info.map do |a|
-          @wallet_balance += a['balance']
-          { address: a['_id'], balance: a['balance'] }
-        end
+      @wallet_knowns = @db.wallet.count params['wallet_id']
+      @wallet_info = @db.wallet.info(params['wallet_id']).map do |a|
+        @wallet_balance += a['balance']
+        { address: a['_id'], balance: a['balance'] }
       end
-      @wallet_knowns = @db.address.wallet_known_count params['wallet_id']
       haml :wallet
     end
 
@@ -77,12 +74,11 @@ module BceExplorer
     end
 
     get '/wallets' do
-      info = @db.address.largest_wallets
-      @wallets = info.map do |wallet|
+      @wallets = @db.wallet.top.map do |wallet|
         {
           id: wallet['_id'],
-          name: @db.address.wallet_name(wallet['_id']),
-          addresses: @db.address.wallet_known_count(wallet['_id']),
+          name: @db.wallet.name(wallet['_id']),
+          addresses: @db.wallet.count(wallet['_id']),
           balance: wallet['total'] }
       end
       haml :wallets
