@@ -2,7 +2,7 @@ module BceExplorer
   # Transactions db storage
   class TxList < Base
     def initialize(dbh)
-      super dbh, 'tx_list'
+      super dbh
     end
 
     # add transaction

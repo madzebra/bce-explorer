@@ -3,6 +3,8 @@ module BceExplorer
   class Base
     def initialize(dbh, col_name = nil)
       col_name ||= self.class.name.downcase
+      # to avoid 'bceexplorer::address' collection name
+      col_name = col_name[/[[:word:]]+$/]
       @col = dbh[col_name]
     end
 

@@ -11,7 +11,7 @@ module BceExplorer
   class DB
     include Mongo
 
-    attr_reader :info, :address, :tx_address, :tx_list, :wallet
+    attr_reader :info, :address, :wallet, :tx_address, :tx_list
 
     def initialize(options = {})
       host = options[:host] || 'localhost'
@@ -20,11 +20,11 @@ module BceExplorer
 
       MongoClient.new(host, port).db(dbname).tap do |dbh|
         @info = Info.new dbh
-        @address = Address.new dbh
-        # TODO: look into this
+        @wallet = Wallet.new dbh
         @tx_address = TxAddress.new dbh
         @tx_list = TxList.new dbh
-        @wallet = Wallet.new dbh
+        # this line MUST be the last, order is IMPORTANT
+        @address = Address.new dbh, self
       end
     end
   end

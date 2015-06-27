@@ -10,8 +10,8 @@ module BceExplorer
     def sync!
       ((@db.info.blocks + 1)..@be.block.count).each do |blk_num|
         @be.block(blk_num).decode_with_tx['tx'].each do |tx|
-          sync_addresses tx
-          @db.transaction << tx
+          sync_transaction tx
+          @db.tx_list << tx
         end
         @db.info.blocks = blk_num
       end
@@ -19,10 +19,10 @@ module BceExplorer
 
     private
 
-    def sync_addresses(tx)
-      sync_wallets tx
+    def sync_transaction(tx)
       sync_inputs tx
       sync_outputs tx
+      sync_wallets tx
     end
 
     def sync_inputs(tx)
@@ -39,16 +39,15 @@ module BceExplorer
         address = output['address']
         next if stake? address
         @db.address[address] += output['value'].to_f
-        @db.tx_address << { address: address, txid: output['txid'] }
+        @db.tx_address << { address: address, txid: tx['txid'] }
       end
     end
 
     def sync_wallets(tx)
-      addresses = extract_addresses_from tx['inputs']
-      @db.wallet.merge! addresses
+      @db.wallet.merge! extract_addresses_from(tx['inputs'])
 
       extract_addresses_from(tx['outputs'])
-        .each { @db.wallet.merge! address }
+        .each { |address| @db.wallet.merge! address }
     end
 
     def extract_addresses_from(source)

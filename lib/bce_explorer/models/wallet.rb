@@ -2,7 +2,7 @@ module BceExplorer
   # guesstimated wallet storage
   class Wallet < Base
     def initialize(dbh)
-      super dbh, 'addresses'
+      super dbh, 'address'
     end
 
     # merge addresses with wallets
@@ -29,7 +29,7 @@ module BceExplorer
       super query: { wallet: wallet }
     end
 
-    # get the largest wallets
+    # the largest wallets
     def top(count = 20)
       aggregate([
         { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
@@ -38,18 +38,24 @@ module BceExplorer
       ])
     end
 
-    # wallet id
     def id(address)
       query = address.is_a?(Array) ? { '$in' => address } : address
-      address = find_one query
-      address.nil? ? SecureRandom.hex(8) : address['wallet']
+      result = find_one query
+      return new_id if result.nil?
+      return new_id if result['wallet'].nil?
+      result['wallet']
     end
 
-    # wallet name
     def name(wallet)
       query = { wallet: wallet }
       order = { balance: :desc }
       find_order_limit(query, order, 1).map { |a| a['_id'] }.first || wallet
+    end
+
+    private
+
+    def new_id
+      SecureRandom.hex(8)
     end
   end
 end

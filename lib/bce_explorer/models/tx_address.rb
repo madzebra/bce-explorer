@@ -2,7 +2,7 @@ module BceExplorer
   # address <==> txid cache storage
   class TxAddress < Base
     def initialize(dbh)
-      super dbh, 'address_tx'
+      super dbh
     end
 
     def <<(info)

@@ -2,12 +2,12 @@ module BceExplorer
   # Address balance
   # and guess wallet storage
   class Address < Base
-    def initialize(dbh)
-      super dbh, 'addresses'
-      # dependencies below needed in #known_address_info
-      @tx_address = TxAddress.new dbh
-      @tx_list = TxList.new dbh
-      @wallet = Wallet.new dbh
+    def initialize(dbh, db_gate)
+      super dbh
+      # dependencies below needed in #known_address_info only
+      @wallet = db_gate.wallet
+      @tx_address = db_gate.tx_address
+      @tx_list = db_gate.tx_list
     end
 
     # get address balance
