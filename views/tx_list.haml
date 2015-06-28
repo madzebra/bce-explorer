@@ -22,7 +22,7 @@
                         = input['address']
                       - else
                         = link_to_address input['address']
-                    %td.amount= "#{coin_amount input['value']} #{coin_tag}" unless input['address'].include? "Generation"
+                    %td.amount= coin_amount input['value'] unless input['address'].include? "Generation"
           %td
             %table.tx-detail-table
               %tbody
@@ -33,4 +33,4 @@
                     - else
                       %td
                         = link_to_address output['address']
-                    %td.amount #{coin_amount output['value']} #{coin_tag}
+                    %td.amount= coin_amount output['value']

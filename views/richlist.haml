@@ -1,4 +1,4 @@
-%h2= "Richest Address (Top #{@top})"
+%h2= "Richest Addresses (Top #{@top})"
 %table.table.table-hover
   %thead
     %tr
@@ -11,8 +11,8 @@
       %tr
         %td.text-right= (index + 1)
         %td= link_to_address row['_id']
-        %td #{coin_amount row['balance']} #{coin_tag}
-        %td #{coin_percent row['balance']} %
+        %td= coin_amount row['balance']
+        %td= coin_percent row['balance']
     %tr
       %td
       %td{colspan: 3}

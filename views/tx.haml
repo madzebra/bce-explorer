@@ -30,8 +30,8 @@
             - if input['address'].include? "Generation"
               = input['address']
             - else
-              =link_to_address input['address']
-          %td= "#{coin_amount input['value']} #{coin_tag}"
+              = link_to_address input['address']
+          %td= coin_amount input['value']
   %h2 Outputs
   %table.table
     %thead
@@ -43,4 +43,4 @@
         - unless output['address'] == "stake"
           %tr
             %td= link_to_address output['address']
-            %td #{coin_amount output['value']} #{coin_tag}
+            %td= coin_amount output['value']

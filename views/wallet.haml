@@ -6,7 +6,7 @@
   %table.table
     %tr
       %td Balance
-      %td #{coin_amount @wallet_balance} #{coin_tag}
+      %td= coin_amount @wallet_balance
     %tr
       %td Addresses
       %td #{@wallet_info.count} with non zero-balance<br />#{@wallet_knowns} known
@@ -24,5 +24,5 @@
         %tr
           %td.text-right= (index + 1)
           %td= link_to_address address[:address]
-          %td #{coin_amount address[:balance]} #{coin_tag}
-          %td #{coin_percent address[:balance]} %
+          %td= coin_amount address[:balance]
+          %td= coin_percent address[:balance]

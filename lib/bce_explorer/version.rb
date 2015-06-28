@@ -1,3 +1,4 @@
+# library version
 module BceExplorer
   VERSION = '0.1.3'
 end

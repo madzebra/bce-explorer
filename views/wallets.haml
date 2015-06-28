@@ -14,4 +14,4 @@
         %td
           %a{href: url("/wallet/#{wallet[:id]}")}= wallet[:name]
         %td= wallet[:addresses]
-        %td #{coin_amount wallet[:balance]} #{coin_tag}
+        %td= coin_amount wallet[:balance]

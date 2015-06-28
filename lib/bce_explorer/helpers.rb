@@ -36,12 +36,12 @@ module BceExplorer
       end
 
       def coin_amount(value)
-        sprintf('%0.08f', value.abs)
+        format("%0.08f #{coin_tag}", value.abs)
       end
 
       def coin_percent(coins)
         @_money_supply ||= @client.money_supply
-        sprintf('%0.02f', (coins.abs / @_money_supply) * 100.0)
+        format('%0.02f %', (coins.abs / @_money_supply) * 100.0)
       end
 
       def coin_tag

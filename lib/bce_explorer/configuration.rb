@@ -3,12 +3,23 @@ module BceExplorer
   class Configuration
     attr_reader :info
 
-    FRONTEND_KEYS = %w(Name Tag Algorithm BitcoinTalk GitHub Website Twitter PaperWallet)
+    FRONTEND_KEYS = %w(Name Tag Algorithm
+                       BitcoinTalk GitHub Website Twitter PaperWallet)
 
     def initialize(coin_config = {})
       @info = coin_config.select { |k, _| FRONTEND_KEYS.include? k }
       @rpc =  coin_config.select { |k, _| k[0, 5] == '_rpc_' }
     end
+
+    def client
+      BceClient::Client.new client_options
+    end
+
+    def db
+      DB.new db_options
+    end
+
+    private
 
     def client_options
       {

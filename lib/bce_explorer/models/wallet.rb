@@ -7,8 +7,9 @@ module BceExplorer
 
     # merge addresses with wallets
     def merge!(addresses)
-      update = { '$set' => { wallet: id(addresses) } }
+      return if addresses.empty? # nothing to do here
 
+      update = { '$set' => { wallet: id(addresses) } }
       if addresses.is_a? Array
         addresses.each { |address| upsert({ _id: address }, update) }
       else

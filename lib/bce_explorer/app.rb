@@ -16,12 +16,11 @@ module BceExplorer
       @block_count = @client.block.count
     end
 
-    def initialize(coin = nil, internal_sync_rich_list = false)
+    def initialize(coin = nil)
       fail if coin.nil?
-      @db = DB.new coin.db_options
-      @client = BceClient::Client.new coin.client_options
+      @db = coin.db
+      @client = coin.client
       @coin_info = coin.info
-      sync_rich_list if internal_sync_rich_list
       super nil
     end
 
@@ -105,19 +104,6 @@ module BceExplorer
       @top_list = @db.address.top count
       @top = count
       haml :richlist
-    end
-
-    def rich_list
-      RichList.new blockexplorer: @client, database: @db
-    end
-
-    def sync_rich_list
-      Thread.new do
-        loop do
-          sleep 60
-          rich_list.sync!
-        end
-      end
     end
   end
 end
