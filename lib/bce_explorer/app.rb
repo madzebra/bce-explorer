@@ -13,41 +13,59 @@ module BceExplorer
     helpers View::Helpers
 
     before do
-      @block_count = @client.block.count
+      bcount = @cache.cache_for('block_count') { @client.block.count.to_s }
+      @block_count = bcount.to_i
     end
 
     def initialize(coin = nil)
       fail if coin.nil?
       @db = coin.db
+      @cache = coin.cache
       @client = coin.client
       @coin_info = coin.info
       super nil
     end
 
+    get '/' do
+      @blocks = (0...15).map do |n|
+        @cache.cache_obj_for "block_#{@block_count - n}" do
+          @client.block(@block_count - n).decode
+        end
+      end
+      haml :index
+    end
+
     get '/address/:address' do
       @address_info = nil
       if @client.address(params['address']).valid?
-        @address_info = @db.address.info params['address']
+        @address_info = @cache.cache_obj_for "address_#{params['address']}" do
+          @db.address.info params['address']
+        end
       end
       haml :address
     end
 
     get '/block/:blk' do
-      @block_info = @client.block(params['blk']).decode_with_tx
+      @block_info = @cache.cache_obj_for "block_with_tx_#{params['blk']}" do
+        @client.block(params['blk']).decode_with_tx
+      end
       haml :block
     end
 
     get '/tx/:txid' do
-      @tx_info = @client.transaction(params['txid']).decode
+      @tx_info = @cache.cache_obj_for "tx_#{params['txid']}" do
+        @client.transaction(params['txid']).decode
+      end
       haml :tx
     end
 
     get '/wallet/:wallet_id' do
+      # TODO: to cache this controller, it needs to be rewritten
       @wallet_balance = 0.0
       @wallet_knowns = @db.wallet.count params['wallet_id']
       @wallet_info = @db.wallet.info(params['wallet_id']).map do |a|
         @wallet_balance += a['balance']
-        { address: a['_id'], balance: a['balance'] }
+        { 'address' => a['_id'], 'balance' => a['balance'] }
       end
       haml :wallet
     end
@@ -74,18 +92,24 @@ module BceExplorer
 
     get '/wallets' do
       @wallets = @db.wallet.top.map do |wallet|
-        {
-          id: wallet['_id'],
-          name: @db.wallet.name(wallet['_id']),
-          addresses: @db.wallet.count(wallet['_id']),
-          balance: wallet['total'] }
+        @cache.cache_obj_for "wallet_top_#{wallet['_id']}" do
+          {
+            id: wallet['_id'],
+            name: @db.wallet.name(wallet['_id']),
+            addresses: @db.wallet.count(wallet['_id']),
+            balance: wallet['total'] }
+        end
       end
       haml :wallets
     end
 
     get '/network' do
-      @network_info = @client.network_info
-      @network_peer = @client.network_peer_info
+      @network_info = @cache.cache_obj_for 'network_info' do
+        @client.network_info
+      end
+      @network_peer = @cache.cache_obj_for 'peer_info' do
+        @client.network_peer_info
+      end
       haml :network
     end
 
@@ -93,14 +117,10 @@ module BceExplorer
       haml :about
     end
 
-    get '/' do
-      @blocks = (0...15).map { |n| @client.block(@block_count - n).decode }
-      haml :index
-    end
-
     private
 
     def top(count)
+      # TODO: this code returns mongo cursor, which can't be cached
       @top_list = @db.address.top count
       @top = count
       haml :richlist

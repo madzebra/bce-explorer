@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'haml'
   spec.add_runtime_dependency 'mongo'
   spec.add_runtime_dependency 'bson_ext'
+  spec.add_runtime_dependency 'redis'
   spec.add_runtime_dependency 'bce-client'
 end

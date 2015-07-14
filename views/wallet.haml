@@ -23,6 +23,6 @@
       - @wallet_info.each_with_index do |address, index|
         %tr
           %td.text-right= (index + 1)
-          %td= link_to_address address[:address]
-          %td= coin_amount address[:balance]
-          %td= coin_percent address[:balance]
+          %td= link_to_address address['address']
+          %td= coin_amount address['balance']
+          %td= coin_percent address['balance']

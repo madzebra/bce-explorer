@@ -19,6 +19,10 @@ module BceExplorer
       DB.new db_options
     end
 
+    def cache
+      Cache.new "bce_#{@info['Name'].downcase}"
+    end
+
     private
 
     def client_options
