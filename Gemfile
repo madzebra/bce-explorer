@@ -1,6 +1,14 @@
 source 'https://rubygems.org'
 
-gemspec
+# web
+gem 'sinatra'
+gem 'haml'
+gem 'thin'
 
-# extacted client lib
+# db
+gem 'mongo'
+gem 'bson_ext'
+gem 'redis'
+
+# data
 gem 'bce-client', github: 'madzebra/bce-client'

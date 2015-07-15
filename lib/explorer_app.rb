@@ -3,9 +3,9 @@ require 'haml'
 require 'bce-client'
 
 module BceExplorer
-  # Application class for app
-  class App < Sinatra::Base
-    set :views, File.expand_path('../../views', File.dirname(__FILE__))
+  # Explorer app hosts coin
+  class ExplorerApp < Sinatra::Base
+    set :views, File.expand_path('views', Env.root)
     set :public_folder, File.expand_path('public', Env.root)
     set :haml, format: :html5, ugly: true
 

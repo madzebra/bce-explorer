@@ -1,55 +1,50 @@
 # Block Chain Explorer for altcoins
 
-Block Chain Explorer for altcoins. Works as stand-alone application for a one coin project. See Usage section.
+Block Chain Explorer for altcoins.
 
-Extracted from BCE project.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'bce-explorer', github: 'madzebra/bce-explorer'
-```
-
-And then execute:
-
+    $ git clone https://github.com/madzebra/bce-explorer.git
+    $ cd bce-explorer
     $ bundle
+    $ cp config/coins/coin.yml.example config/coins/ros.yml
+    $ vim config/coins/ros.yml
+    $ thin -C config/config.yml start
 
-Or install it yourself as:
-
-    $ gem install bce-explorer
 
 ## Usage
 
-Simple application example
+config for nginx
 
-```ruby
-# config.ru
-require 'rubygems'
-require 'bundler/setup'
-require 'yaml'
-require 'bce-explorer'
-
-COIN_CONFIG = <<EOF
-Name: "RosCoin"
-Tag: "ROS"
-Algorithm: "X11 (PoW) + Proof of Stake"
-BitcoinTalk: "https://bitcointalk.org/index.php?topic=810437.0"
-GitHub: "https://github.com/roscoin1/roscoin"
-Website: "http://www.roscoin.com"
-Twitter: "https://twitter.com/roscoin"
-_rpc_host: "127.0.0.1"
-_rpc_port: "19092"
-_rpc_user: "Roscoinrpc"
-_rpc_pass: "Roscoinpass"
-EOF
-
-BceExplorer::Env.root = File.expand_path '.', File.dirname(__FILE__)
-coin = BceExplorer::Configuration.new YAML.load(COIN_CONFIG)
-
-run BceExplorer::App.new coin
 ```
+upstream bce-app {
+  server unix:/tmp/thin.0.sock;
+}
+
+server {
+  listen   80;
+  server_name bce.madzebra.co;
+
+  location ~ \.(png|css|ico|jpg|gif|txt) {
+    root /opt/bce-app/public; # FIXME if you have another path
+    access_log off;
+  }
+
+  location / {
+    proxy_pass http://bce-app;
+    proxy_set_header  X-Real-IP  $remote_addr;
+    proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header  Host $http_host;
+  }
+}
+```
+
+## Dependency
+
+* ruby 2 (was tested with 2.2)
+* mongodb
+* redis
 
 ## Contributing
 
