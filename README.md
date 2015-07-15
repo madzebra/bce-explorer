@@ -2,7 +2,6 @@
 
 Block Chain Explorer for altcoins.
 
-
 ## Installation
 
     $ git clone https://github.com/madzebra/bce-explorer.git
@@ -18,7 +17,7 @@ Block Chain Explorer for altcoins.
 config for nginx
 
 ```
-upstream bce-app {
+upstream bce-explorer {
   server unix:/tmp/thin.0.sock;
 }
 
@@ -27,12 +26,12 @@ server {
   server_name bce.madzebra.co;
 
   location ~ \.(png|css|ico|jpg|gif|txt) {
-    root /opt/bce-app/public; # FIXME if you have another path
+    root /opt/bce-explorer/public; # FIXME if you have another path
     access_log off;
   }
 
   location / {
-    proxy_pass http://bce-app;
+    proxy_pass http://bce-explorer;
     proxy_set_header  X-Real-IP  $remote_addr;
     proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header  Host $http_host;
@@ -43,8 +42,8 @@ server {
 ## Dependency
 
 * ruby 2 (was tested with 2.2)
-* mongodb
-* redis
+* mongodb (used as db storage for wallets info)
+* redis (used as cache)
 
 ## Contributing
 
