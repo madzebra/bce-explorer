@@ -1,6 +1,6 @@
-%h2= title
-- if tx_info.nil?
-  %p No transactions found
+%h3= title
+- if tx_info.nil? or tx_info.empty?
+  %h3 No transactions found
 - else
   %table.table#transactions
     %thead

@@ -1,11 +1,11 @@
-%h2 Largest Guesstimated Wallets
+%h3 Largest Guesstimated Wallets
 %div.alert.alert-info{role: 'alert'} This feature is experimental and inaccurate! 
 %table.table.table-hover#largest-wallets
   %thead
     %tr
       %th Rank
       %th Name
-      %th Addresses
+      %th.hidden-xs.hidden-sm Addresses
       %th Balance
   %tbody
     - @wallets.each_with_index do |wallet, index|
@@ -13,5 +13,5 @@
         %td.text-right= (index + 1)
         %td
           %a{href: url("/wallet/#{wallet['id']}")}= wallet['name']
-        %td= wallet['addresses']
+        %td.hidden-xs.hidden-sm= wallet['addresses']
         %td= coin_amount wallet['balance']

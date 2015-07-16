@@ -1,17 +1,17 @@
 = partial :about
 
-%h2 Latest Blocks
+%h3 Latest Blocks
 %table.table.table-hover#recent-blocks
   %thead
     %tr
       %th Blockheight
       %th Date/Time
       %th Transactions
-      %th Difficulty
+      %th.hidden-xs Difficulty
   %tbody
     - @blocks.each do |blk|
       %tr
         %td= link_to_block blk['height']
         %td= time_ago blk['time']
         %td= blk['tx'].length
-        %td= blk['difficulty']
+        %td.hidden-xs= blk['difficulty']

@@ -4,29 +4,29 @@
     %title Block Chain Explorer
     %meta{charset: "utf-8"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-    %link{href: url("/favicon.ico"), rel: "shortcut icon", type: "image/x-icon"}
-    %link{href: "/bootstrap.min.css", rel: "stylesheet"}
+    %link{href: "/img/favicon.ico", rel: "shortcut icon", type: "image/x-icon"}
+    %link{href: "/vendor/css/bootstrap.min.css", rel: "stylesheet"}
+    %link{href: "/vendor/css/flat-ui.min.css", rel: "stylesheet"}
     %style body{padding-top:80px;}.panel-coin{height:120px;}
 
   %body
-    .navbar.navbar-default.navbar-fixed-top{role: "navigation"}
-      .container
-        .navbar-header
-          %a.navbar-brand{href: url("/")} Block Explorer
+    .navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
+      .navbar-header
+        %a.navbar-brand{href: url("/")} Block Explorer
+
     .container
       .row
         - @coins.each do |name, coin|
-          .col-sm-6.col-md-3
-            %a{href: url(name)}
-              .panel.panel-default.text-center
-                .panel-body.panel-coin
-                  %img{alt: coin.info['Name'], src: url("/#{coin.info['Tag']}.png")}
-                .panel-footer
+          .col-xs-12.col-sm-6.col-md-3.col-lg-3
+            %div.tile
+              %a{href: url(name)}
+                %img.tile-image.big-illustration{alt: coin.info['Name'], src: url("/img/#{coin.info['Tag']}-big.png")}
+                .h5
                   = coin.info['Name']
 
     .footer
       .container
         %p.text-muted
-          2015, <a href="https://github.com/madzebra/bce-explorer/">Block Chain Explorer</a>, v.#{BceExplorer::VERSION}. 
+          2015, <a href="https://github.com/madzebra/bce-explorer">Block Chain Explorer</a> (v.#{BceExplorer::VERSION}) 
         %p
           Bitcoin donations can be sent to <code>14SZqCreNCQgvgB3z9PGEncad9X5xdMfMh</code>

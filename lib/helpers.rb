@@ -15,7 +15,7 @@ module BceExplorer
       end
 
       def link_to_tx_short(id)
-        "<a href='#{url("/tx/#{id}")}'>#{shorten_tx(id)}</a>"
+        "<a href='#{url("/tx/#{id}")}'>#{shorten_hash(id)}</a>"
       end
 
       def link_to(link)
@@ -31,8 +31,8 @@ module BceExplorer
         haml page.to_sym, options.merge!(layout: false)
       end
 
-      def shorten_tx(txhash)
-        "#{txhash[0..9]}..."
+      def shorten_hash(hash_line)
+        "#{hash_line[0..9]}..."
       end
 
       def coin_amount(value)

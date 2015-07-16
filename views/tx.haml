@@ -1,7 +1,7 @@
 - if @tx_info.empty?
-  %h2 Transaction Not Found
+  %h3 Transaction Not Found
 - else
-  %h2 Details for Transaction
+  %h3 Details for Transaction
   %table.table
     %tr
       %td Hash
@@ -17,7 +17,7 @@
       %td Date/Time
       %td= human_time @tx_info['time']
 
-  %h2 Inputs
+  %h3 Inputs
   %table.table
     %thead
       %tr
@@ -32,7 +32,8 @@
             - else
               = link_to_address input['address']
           %td= coin_amount input['value']
-  %h2 Outputs
+
+  %h3 Outputs
   %table.table
     %thead
       %tr

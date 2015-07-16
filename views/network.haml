@@ -1,6 +1,6 @@
 .row
   .col-md-6
-    %h2 Network Information
+    %h3 Network Information
     - if @network_info.nil?
       %p couldn't get information
     - else
@@ -33,7 +33,7 @@
             %td= @network_info['difficulty']['proof-of-stake']
 
   .col-md-6
-    %h2 Node List
+    %h3 Node List
     %textarea.form-control{rows: 15, readonly: true, style: 'cursor:text'}
       - if @network_peer.nil?
         none

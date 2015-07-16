@@ -1,10 +1,10 @@
-%h2 About #{@coin_info['Name']}
+%h3 About #{@coin_info['Name']}
 .row
-  .col-md-6
+  .col-md-6.col-lg-6
     %table.table
       - @coin_info.select {|k,_| k != 'Name' }.each do |k, v|
         %tr
           %th= k
           %td= v[0, 2] == "ht" ? link_to(v) : v
-  .col-md-6
-    %img.img-responsive{alt: "#{@coin_info['Name']} logo", src: "/#{coin_tag}-big.png"}
+  .col-md-6.col-lg-6.hidden-xs.hidden-sm
+    %img.img-responsive{alt: "#{@coin_info['Name']} logo", src: "/img/#{coin_tag}-big.png"}

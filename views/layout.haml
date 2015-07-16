@@ -4,53 +4,60 @@
     %title Block Chain Explorer for #{@coin_info['Name'].upcase}
     %meta{charset: "utf-8"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
-    %link{href: "/#{coin_tag.downcase}icon.ico", rel: "shortcut icon", type: "image/x-icon"}
-    %link{href: "/bootstrap.min.css", rel: "stylesheet"}
-    %style body{padding-top:80px;}.coin-logo{height:5em;max-height:5em;padding:0;margin:10px 10px 10px auto;}.tx-detail-table{width:100%;}.amount{text-align:right;}
+    %link{href: "/img/#{coin_tag.downcase}icon.ico", rel: "shortcut icon", type: "image/x-icon"}
+    %link{href: "/vendor/css/bootstrap.min.css", rel: "stylesheet"}
+    %link{href: "/vendor/css/flat-ui.min.css", rel: "stylesheet"}
+    %style body{padding-top:80px;}.coin-logo{height:5em;max-height:5em;padding:0;margin:10px 10px 10px auto;}.tx-detail-table{width:100%;}.amount{text-align:right;}.block-pager{margin: 0 !important;}
 
   %body
-    .navbar.navbar-default.navbar-fixed-top{role: "navigation"}
-      .container
-        .navbar-header
-          %a.navbar-brand{href: "/"} Block Explorer
-        .collapse.navbar-collapse
-          %ul.nav.navbar-nav
-            %li
-              %a{href: url("/")} Blocks
-            %li
-              %a{href: url("/top20")} Richlist
-            %li
-              %a{href: url("/wallets")} Wallets
-            %li
-              %a{href: url("/network")} Network
-            %li
-              %a{href: url("/about")} About
+    .navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
+      .navbar-header
+        %button.navbar-toggle{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar-collapse-01"}
+          %span.sr-only Toggle navigation
+        %a.navbar-brand{href: "/"} Block Explorer
+
+      .collapse.navbar-collapse#navbar-collapse-01
+        %ul.nav.navbar-nav
+          %li
+            %a{href: url("/")} Blocks
+          %li
+            %a{href: url("/top20")} Richlist
+          %li
+            %a{href: url("/wallets")} Wallets
+          %li
+            %a{href: url("/network")} Network
+          %li
+            %a{href: url("/about")} About
     .container
       .row
         %table{align: "center"}
           %tr
             %td
               %a{href: url("/")}
-                %img.coin-logo{src: "/#{coin_tag}.png"}
+                %img.coin-logo{src: "/img/#{coin_tag}.png"}
             %td{"vertical-align" => "center"}
-              %h1{style: "margin-top: 0"}
+              %h2{style: "margin-top: 0"}
                 %a{href: url("/")}= "#{coin_tag}<span class='hidden-xs'> Blockchain</span> Explorer"
               %p up to block <span id='up-to-block'>#{@block_count}</span>
 
-      .row#search-row{style:"margin-bottom: 10px"}
-        .col-sm-3
-        %form.form-horizontal.col-sm-6#search{role: "search", action: url("/search"), method: "get"}
-          .input-group
-            %input.form-control#searchField{type: "text",  name: "q", placeholder: "Search address, block, transaction"}
-            .input-group-btn
-              %button.btn.btn-default{type: "submit"}
-                %i.glyphicon.glyphicon-search
+      .row.text-center#search-row{style:"margin-bottom: 10px"}
+        .col-md-3.col-lg-3
+        .col-xs-12.col-sm-12.col-md-6.col-lg-6
+          %form.form-horizontal#search{role: "search", action: url("/search"), method: "get"}
+            .input-group
+              %input.form-control#searchField{type: "text",  name: "q", placeholder: "Search address, block, transaction"}
+              .input-group-btn
+                %button.btn.btn-default{type: "submit"}
+                  %i.fui-search
 
       .row= yield
+
+    %script{src: "/vendor/js/jquery.min.js"}
+    %script{src: "/vendor/js/flat-ui.min.js"}
 
     .footer
       .container
         %p.text-muted
-          2015, <a href="https://github.com/madzebra/bce-explorer">Block Chain Explorer</a> for #{@coin_info['Name'].upcase}, v.#{BceExplorer::VERSION}. 
+          2015, <a href="https://github.com/madzebra/bce-explorer">Block Chain Explorer</a> (v.#{BceExplorer::VERSION}) for <strong>#{@coin_info['Name'].upcase}</strong>
         %p
           Bitcoin donations can be sent to <code>14SZqCreNCQgvgB3z9PGEncad9X5xdMfMh</code>
