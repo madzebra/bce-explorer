@@ -38,5 +38,5 @@
       - if @network_peer.nil?
         none
       - else
-        - @network_peer.each do |peer|
+        - @network_peer.reject{ |peer| peer['inbound'] }.each do |peer|
           = "addnode=#{peer['addr']}\n"
