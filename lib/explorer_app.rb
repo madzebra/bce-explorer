@@ -38,24 +38,18 @@ module BceExplorer
     get '/address/:address' do
       @address_info = nil
       if @client.address(params['address']).valid?
-        @address_info = @cache.cache_obj_for "address_#{params['address']}" do
-          @db.address.info params['address']
-        end
+        @address_info = fetch_address_info params['address']
       end
       haml :address
     end
 
     get '/block/:blk' do
-      @block_info = @cache.cache_obj_for "block_with_tx_#{params['blk']}" do
-        @client.block(params['blk']).decode_with_tx
-      end
+      @block_info = fetch_block_info params['blk']
       haml :block
     end
 
     get '/tx/:txid' do
-      @tx_info = @cache.cache_obj_for "tx_#{params['txid']}" do
-        @client.transaction(params['txid']).decode
-      end
+      @tx_info = fetch_tx_info params['txid']
       haml :tx
     end
 
@@ -104,12 +98,8 @@ module BceExplorer
     end
 
     get '/network' do
-      @network_info = @cache.cache_obj_for 'network_info' do
-        @client.network_info
-      end
-      @network_peer = @cache.cache_obj_for 'peer_info' do
-        @client.network_peer_info
-      end
+      @network_info = fetch_network_info
+      @network_peer = fetch_peer_info
       haml :network
     end
 
@@ -124,6 +114,35 @@ module BceExplorer
       @top_list = @db.address.top count
       @top = count
       haml :richlist
+    end
+
+    def fetch_address_info(address)
+      @cache.cache_obj_for "address_#{address}" do
+        @db.address.info address
+      end
+    end
+
+    def fetch_block_info(block)
+      @cache.cache_obj_for "block_with_tx_#{block}" do
+        @client.block(block).decode_with_tx
+      end
+    end
+    def fetch_tx_info(txid)
+      @cache.cache_obj_for "tx_#{txid}" do
+        @client.transaction(txid).decode
+      end
+    end
+
+    def fetch_network_info
+      @cache.cache_obj_for 'network_info' do
+        @client.network_info
+      end
+    end
+
+    def fetch_peer_info
+      @cache.cache_obj_for 'peer_info' do
+        @client.network_peer_info
+      end
     end
   end
 end
