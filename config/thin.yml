@@ -1,7 +1,7 @@
 pid: /tmp/thin.pid
 timeout: 30
 wait: 30
-log: thin.log
+log: log/thin.log
 max_conns: 1024
 require: []
 environment: production

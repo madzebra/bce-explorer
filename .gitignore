@@ -8,6 +8,7 @@
 /spec/reports/
 /tmp/
 /config/coins/*.yml
+/log/*.log
 *.bundle
 *.so
 *.o

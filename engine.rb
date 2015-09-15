@@ -1,4 +1,3 @@
-require 'yaml'
 require_relative './lib/helpers'
 require_relative './lib/configuration'
 require_relative './lib/cache'
@@ -19,9 +18,8 @@ module BceExplorer
       Env.root = root
       @coins = {}
       Dir["#{root}/config/coins/*.yml"].each do |coin_path|
-        coin_config = YAML.load_file coin_path
-        coin_config_params = Configuration.new coin_config
-        @coins[coin_config['Tag'].downcase] = coin_config_params
+        _config = Configuration.new coin_path
+        @coins[_config.info['Tag'].downcase] = _config
       end
     end
 

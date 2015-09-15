@@ -1,3 +1,5 @@
+require 'yaml'
+
 module BceExplorer
   # Coin configuration class
   class Configuration
@@ -6,9 +8,12 @@ module BceExplorer
     FRONTEND_KEYS = %w(Name Tag Algorithm
                        BitcoinTalk GitHub Website Twitter PaperWallet)
 
-    def initialize(coin_config = {})
+    def initialize(coin_config_file)
+      coin_config = YAML.load_file coin_config_file
       @info = coin_config.select { |k, _| FRONTEND_KEYS.include? k }
       @rpc =  coin_config.select { |k, _| k[0, 5] == '_rpc_' }
+      load_db_config
+      load_cache_config
     end
 
     def client
@@ -20,7 +25,7 @@ module BceExplorer
     end
 
     def cache
-      Cache.new "bce_#{@info['Name'].downcase}"
+      Cache.new cache_options, db_options[:dbname]
     end
 
     private
@@ -36,10 +41,25 @@ module BceExplorer
 
     def db_options
       {
-        host: 'localhost',
-        port: 27_017,
-        dbname: "bce_#{@info['Name'].downcase}"
+        host: @_db_conf['host'] || 'localhost',
+        port: @_db_conf['port'] || 27_017,
+        dbname: "#{@_db_conf['db_prefix']}_#{@info['Name'].downcase}"
       }
     end
+
+    def cache_options
+    	{
+    		host: @_cache_conf['host'] || 'localhost',
+    		port: @_cache_conf['port'] || 6_379,
+    	}
+    end
+
+		def load_db_config
+			@_db_conf = YAML.load_file "#{Env.root}/config/mongo.yml"
+		end
+
+		def load_cache_config
+			@_cache_conf = YAML.load_file "#{Env.root}/config/redis.yml"
+		end
   end
 end
