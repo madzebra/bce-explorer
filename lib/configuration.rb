@@ -43,23 +43,23 @@ module BceExplorer
       {
         host: @_db_conf['host'] || 'localhost',
         port: @_db_conf['port'] || 27_017,
-        dbname: "#{@_db_conf['db_prefix']}_#{@info['Name'].downcase}"
+        dbname: "#{@_db_conf['db_prefix']}_#{@info['Name'].downcase}" || 'bce'
       }
     end
 
     def cache_options
-    	{
-    		host: @_cache_conf['host'] || 'localhost',
-    		port: @_cache_conf['port'] || 6_379,
-    	}
+      {
+        host: @_cache_conf['host'] || 'localhost',
+        port: @_cache_conf['port'] || 6_379
+      }
     end
 
-		def load_db_config
-			@_db_conf = YAML.load_file "#{Env.root}/config/mongo.yml"
-		end
+    def load_db_config
+      @_db_conf = YAML.load_file Env.mongo_conf_file
+    end
 
-		def load_cache_config
-			@_cache_conf = YAML.load_file "#{Env.root}/config/redis.yml"
-		end
+    def load_cache_config
+      @_cache_conf = YAML.load_file Env.redis_conf_file
+    end
   end
 end

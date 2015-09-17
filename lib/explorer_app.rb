@@ -91,7 +91,8 @@ module BceExplorer
             id: wallet['_id'],
             name: @db.wallet.name(wallet['_id']),
             addresses: @db.wallet.count(wallet['_id']),
-            balance: wallet['total'] }
+            balance: wallet['total']
+          }
         end
       end
       haml :wallets
@@ -127,6 +128,7 @@ module BceExplorer
         @client.block(block).decode_with_tx
       end
     end
+
     def fetch_tx_info(txid)
       @cache.cache_obj_for "tx_#{txid}" do
         @client.transaction(txid).decode

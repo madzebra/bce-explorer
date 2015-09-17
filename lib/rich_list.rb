@@ -1,10 +1,9 @@
 module BceExplorer
   # richlist sync routine
   class RichList
-    def initialize(options = {})
-      @be = options[:blockexplorer]
-      @db = options[:database]
-      fail if @be.nil? || @db.nil?
+    def initialize(blockexplorer:, database:)
+      @be = blockexplorer
+      @db = database
     end
 
     def sync!

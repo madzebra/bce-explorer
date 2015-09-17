@@ -13,12 +13,8 @@ module BceExplorer
 
     attr_reader :info, :address, :wallet, :tx_address, :tx_list
 
-    def initialize(options = {})
-      host = options[:host] || 'localhost'
-      port = options[:port] || 27_017
-      dbname = options[:dbname] || 'blockexplorer'
-
-      MongoClient.new(host, port).db(dbname).tap do |dbh|
+    def initialize(opts = nil)
+      MongoClient.new(opts[:host], opts[:port]).db(opts[:dbname]).tap do |dbh|
         @info = Info.new dbh
         @wallet = Wallet.new dbh
         @tx_address = TxAddress.new dbh

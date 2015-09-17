@@ -17,9 +17,9 @@ module BceExplorer
     def initialize(root)
       Env.root = root
       @coins = {}
-      Dir["#{root}/config/coins/*.yml"].each do |coin_path|
-        _config = Configuration.new coin_path
-        @coins[_config.info['Tag'].downcase] = _config
+      Dir["#{Env.coins_path}/*.yml"].each do |coin_config_file|
+        config = Configuration.new coin_config_file
+        @coins[config.info['Tag'].downcase] = config
       end
     end
 
