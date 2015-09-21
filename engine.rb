@@ -1,13 +1,14 @@
-require_relative './lib/helpers'
 require_relative './lib/configuration'
 require_relative './lib/cache'
 require_relative './lib/db'
-require_relative './lib/reports/init.rb'
 require_relative './lib/rich_list'
 require_relative './lib/env'
 require_relative './lib/version'
-require_relative './lib/explorer_app'
-require_relative './lib/frontend_app'
+require_relative './app/reports/init.rb'
+require_relative './app/helpers/route'
+require_relative './app/helpers/view'
+require_relative './app/explorer_app'
+require_relative './app/frontend_app'
 
 module BceExplorer
   # Engine class creates web applications

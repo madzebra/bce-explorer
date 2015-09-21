@@ -1,10 +1,10 @@
 require 'mongo'
-require_relative './models/base'
-require_relative './models/address'
-require_relative './models/info'
-require_relative './models/tx_address'
-require_relative './models/tx_list'
-require_relative './models/wallet'
+require_relative '../app/models/base'
+require_relative '../app/models/address'
+require_relative '../app/models/info'
+require_relative '../app/models/tx_address'
+require_relative '../app/models/tx_list'
+require_relative '../app/models/wallet'
 
 module BceExplorer
   # db storage
