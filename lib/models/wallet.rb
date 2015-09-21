@@ -18,7 +18,7 @@ module BceExplorer
     end
 
     # find top addresses with non-zero balance
-    def info(wallet)
+    def fetch(wallet)
       addresses = find_all(wallet: wallet).map { |a| a['_id'] }
       query = { _id: { '$in' => addresses }, balance: { '$gt' => 1e-8 } }
       order = { balance: :desc }
@@ -51,6 +51,10 @@ module BceExplorer
       query = { wallet: wallet }
       order = { balance: :desc }
       find_order_limit(query, order, 1).map { |a| a['_id'] }.first || wallet
+    end
+
+    def exists?(wallet)
+      find_all(wallet: wallet).count > 0
     end
 
     private

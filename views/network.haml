@@ -1,7 +1,7 @@
 .row
   .col-md-6
     %h3 Network Information
-    - if @network_info.nil?
+    - if @network_info.empty?
       %p couldn't get information
     - else
       %table.table
@@ -35,7 +35,7 @@
   .col-md-6
     %h3 Node List
     %textarea.form-control{rows: 15, readonly: true, style: 'cursor:text'}
-      - if @network_peer.nil?
+      - if @network_peer.empty?
         none
       - else
         - @network_peer.reject{ |peer| peer['inbound'] }.each do |peer|

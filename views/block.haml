@@ -12,7 +12,10 @@
               %a{href: to_block(@block_info['previousblockhash']), title: 'previous block'}
                 %span.fui-arrow-left
 
-          %li.block-hash
+          %li.block-hash.hidden-xs.hidden-sm
+            %span{title: "#{@block_info['hash']}"}= @block_info['hash']
+
+          %li.block-hash.hidden-md.hidden-lg
             %span{title: "#{@block_info['hash']}"}= shorten_hash @block_info['hash']
 
           - if @block_count > @block_info['height'].to_i

@@ -6,10 +6,10 @@
   %table.table
     %tr
       %td Balance
-      %td= coin_amount @wallet_balance
+      %td= coin_amount @wallet_info['balance']
     %tr
       %td Addresses
-      %td #{@wallet_info.count} with non zero-balance<br />#{@wallet_knowns} known
+      %td #{@wallet_info['addresses'].count} with non zero-balance<br />#{@wallet_info['size']} known
 
   %h3 Addresses with non-zero balance
   %table.table
@@ -20,7 +20,7 @@
         %th Balance
         %th.hidden-xs.hidden-sm Percent of coins
     %tbody
-      - @wallet_info.each_with_index do |address, index|
+      - @wallet_info['addresses'].each_with_index do |address, index|
         %tr
           %td.text-right= (index + 1)
           %td= link_to_address address['address']

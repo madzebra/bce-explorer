@@ -1,5 +1,5 @@
 %h3 Largest Guesstimated Wallets
-%div.alert.alert-info{role: 'alert'} This feature is experimental and inaccurate! 
+%div.alert.alert-info{role: 'alert'} This feature is experimental and inaccurate!
 %table.table.table-hover#largest-wallets
   %thead
     %tr
@@ -13,5 +13,5 @@
         %td.text-right= (index + 1)
         %td
           %a{href: url("/wallet/#{wallet['id']}")}= wallet['name']
-        %td.hidden-xs.hidden-sm= wallet['addresses']
+        %td.hidden-xs.hidden-sm= wallet['size']
         %td= coin_amount wallet['balance']

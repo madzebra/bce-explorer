@@ -23,6 +23,7 @@ module BceExplorer
       @cache = coin.cache
       @client = coin.client
       @coin_info = coin.info
+      @reports = Reports.new @db
       super nil
     end
 
@@ -36,31 +37,36 @@ module BceExplorer
     end
 
     get '/address/:address' do
-      @address_info = nil
       if @client.address(params['address']).valid?
-        @address_info = fetch_address_info params['address']
+        @address_info = @cache.cache_obj_for "address_#{params['address']}" do
+          @reports.address.call params['address']
+        end
       end
+      @address_info ||= {}
       haml :address
     end
 
     get '/block/:blk' do
-      @block_info = fetch_block_info params['blk']
+      @block_info = @cache.cache_obj_for "block_with_tx_#{params['blk']}" do
+        @client.block(params['blk']).decode_with_tx
+      end
       haml :block
     end
 
     get '/tx/:txid' do
-      @tx_info = fetch_tx_info params['txid']
+      @tx_info = @cache.cache_obj_for "tx_#{params['txid']}" do
+        @client.transaction(params['txid']).decode
+      end
       haml :tx
     end
 
     get '/wallet/:wallet_id' do
-      # TODO: to cache this controller, it needs to be rewritten
-      @wallet_balance = 0.0
-      @wallet_knowns = @db.wallet.count params['wallet_id']
-      @wallet_info = @db.wallet.info(params['wallet_id']).map do |a|
-        @wallet_balance += a['balance']
-        { 'address' => a['_id'], 'balance' => a['balance'] }
+      if @db.wallet.exists? params['wallet_id']
+        @wallet_info = @cache.cache_obj_for "wallet_#{params['wallet_id']}" do
+          @reports.wallet.call params['wallet_id']
+        end
       end
+      @wallet_info ||= {}
       haml :wallet
     end
 
@@ -76,22 +82,14 @@ module BceExplorer
       haml :search_fail
     end
 
-    get '/top20' do
-      top 20
-    end
-
-    get '/top50' do
-      top 50
-    end
-
     get '/wallets' do
       @wallets = @db.wallet.top.map do |wallet|
         @cache.cache_obj_for "wallet_top_#{wallet['_id']}" do
           {
-            id: wallet['_id'],
-            name: @db.wallet.name(wallet['_id']),
-            addresses: @db.wallet.count(wallet['_id']),
-            balance: wallet['total']
+            'id' => wallet['_id'],
+            'name' => @db.wallet.name(wallet['_id']),
+            'size' => @db.wallet.count(wallet['_id']),
+            'balance' => wallet['total']
           }
         end
       end
@@ -99,9 +97,21 @@ module BceExplorer
     end
 
     get '/network' do
-      @network_info = fetch_network_info
-      @network_peer = fetch_peer_info
+      @network_info = @cache.cache_obj_for 'network_info' do
+        @client.network_info
+      end
+      @network_peer = @cache.cache_obj_for 'peer_info' do
+        @client.network_peer_info
+      end
       haml :network
+    end
+
+    get '/top20' do
+      top 20
+    end
+
+    get '/top50' do
+      top 50
     end
 
     get '/about' do
@@ -111,40 +121,13 @@ module BceExplorer
     private
 
     def top(count)
-      # TODO: this code returns mongo cursor, which can't be cached
-      @top_list = @db.address.top count
       @top = count
+      @top_list = @db.address.top(count).map do |address|
+        @cache.cache_obj_for "richlist_#{address['_id']}" do
+          { 'address' => address['_id'], 'balance' => address['balance'] }
+        end
+      end
       haml :richlist
-    end
-
-    def fetch_address_info(address)
-      @cache.cache_obj_for "address_#{address}" do
-        @db.address.info address
-      end
-    end
-
-    def fetch_block_info(block)
-      @cache.cache_obj_for "block_with_tx_#{block}" do
-        @client.block(block).decode_with_tx
-      end
-    end
-
-    def fetch_tx_info(txid)
-      @cache.cache_obj_for "tx_#{txid}" do
-        @client.transaction(txid).decode
-      end
-    end
-
-    def fetch_network_info
-      @cache.cache_obj_for 'network_info' do
-        @client.network_info
-      end
-    end
-
-    def fetch_peer_info
-      @cache.cache_obj_for 'peer_info' do
-        @client.network_peer_info
-      end
     end
   end
 end

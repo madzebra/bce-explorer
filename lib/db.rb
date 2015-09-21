@@ -20,7 +20,7 @@ module BceExplorer
         @tx_address = TxAddress.new dbh
         @tx_list = TxList.new dbh
         # this line MUST be the last, order is IMPORTANT
-        @address = Address.new dbh, self
+        @address = Address.new dbh
       end
     end
   end

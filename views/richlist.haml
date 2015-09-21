@@ -10,7 +10,7 @@
     - @top_list.each_with_index do |row, index|
       %tr
         %td.text-right= (index + 1)
-        %td= link_to_address row['_id']
+        %td= link_to_address row['address']
         %td= coin_amount row['balance']
         %td.hidden-xs.hidden-sm= coin_percent row['balance']
     %tr
