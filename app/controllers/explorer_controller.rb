@@ -1,16 +1,7 @@
-require 'sinatra/base'
-require 'haml'
-require 'bce-client'
-
 module BceExplorer
   # Explorer app hosts coin
-  class ExplorerApp < Sinatra::Base
-    set :views, File.expand_path('views', Env.root)
-    set :public_folder, File.expand_path('public', Env.root)
-    set :haml, format: :html5, ugly: true
-
-    helpers Route::Helpers
-    helpers View::Helpers
+  class ExplorerController < ApplicationController
+    helpers ExplorerHelper
 
     before do
       bcount = @cache.cache_for('block_count') { @client.block.count.to_s }
@@ -24,7 +15,7 @@ module BceExplorer
       @client = coin.client
       @coin_info = coin.info
       @reports = Reports.new @db
-      super nil
+      super
     end
 
     get '/' do

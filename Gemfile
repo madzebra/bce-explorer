@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # web
-gem 'sinatra'
+gem 'sinatra', require: 'sinatra/base'
 gem 'haml'
 gem 'thin'
 

@@ -1,15 +1,3 @@
-require_relative './lib/configuration'
-require_relative './lib/cache'
-require_relative './lib/db'
-require_relative './lib/rich_list'
-require_relative './lib/env'
-require_relative './lib/version'
-require_relative './app/reports/init.rb'
-require_relative './app/helpers/route'
-require_relative './app/helpers/view'
-require_relative './app/explorer_app'
-require_relative './app/frontend_app'
-
 module BceExplorer
   # Engine class creates web applications
   # one sinatra app per coin + app for coin list
@@ -25,12 +13,12 @@ module BceExplorer
       end
     end
 
-    def explorer_app(coin)
-      ExplorerApp.new coin
+    def explorer_controller(coin)
+      ExplorerController.new coin
     end
 
-    def frontend_app
-      FrontendApp.new @coins
+    def home_controller
+      HomeController.new @coins
     end
 
     def sync_rich_list

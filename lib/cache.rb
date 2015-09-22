@@ -1,6 +1,3 @@
-require 'json'
-require 'redis'
-
 module BceExplorer
   # Cache class
   class Cache

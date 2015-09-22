@@ -6,10 +6,11 @@ module BceExplorer
       # to avoid 'bceexplorer::address' collection name
       col_name = col_name[/[[:word:]]+$/]
       @col = dbh[col_name]
+      @cona = col_name
     end
 
     def count(query)
-      @col.count query
+      @col.count query: query
     end
 
     private

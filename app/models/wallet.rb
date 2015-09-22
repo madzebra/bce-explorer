@@ -27,7 +27,7 @@ module BceExplorer
 
     # size of the wallet
     def count(wallet)
-      super query: { wallet: wallet }
+      super wallet: wallet
     end
 
     # the largest wallets
