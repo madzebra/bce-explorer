@@ -9,7 +9,7 @@ Block Chain Explorer for altcoins.
     $ bundle
     $ cp config/coins/coin.yml.example config/coins/ros.yml
     $ vim config/coins/ros.yml
-    $ thin -C config/config.yml start
+    $ ./server start
 
 
 ## Usage
@@ -41,9 +41,9 @@ server {
 
 ## Dependency
 
-* ruby 2 (was tested with 2.2)
-* mongodb (used as db storage for wallets info)
-* redis (used as cache)
+* ruby 2.2 (was tested with 2.2)
+* mongodb (db storage for wallets)
+* redis (cache server)
 
 ## Contributing
 
