@@ -1,6 +1,3 @@
-require 'sinatra/base'
-require 'haml'
-
 module BceExplorer
   # Base Application controller class
   class ApplicationController < Sinatra::Base
