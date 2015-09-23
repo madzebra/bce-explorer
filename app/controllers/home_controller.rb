@@ -7,7 +7,7 @@ module BceExplorer
     end
 
     get '/' do
-      haml :list_coins, layout: false
+      haml :home, layout: false
     end
 
     get '*' do
