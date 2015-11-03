@@ -4,6 +4,7 @@ module BceExplorer
     Address = Struct.new :address,
                          :sent,
                          :received,
+                         :minted,
                          :balance,
                          :wallet,
                          :txs do
