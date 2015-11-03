@@ -21,6 +21,11 @@ module BceExplorer
       @col.find_one _id: param
     end
 
+    # find one element with given query
+    def find_by(query)
+      @col.find_one query
+    end
+
     def find_all(query)
       @col.find(query)
     end
