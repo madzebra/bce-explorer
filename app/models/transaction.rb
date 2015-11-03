@@ -1,5 +1,8 @@
 module BceExplorer
-  # Transactions db storage
+  # Transactions db Storage
+  #
+  # _id - txid
+  # tx - content of tx
   class Transaction < Base
     def initialize(dbh)
       super dbh
