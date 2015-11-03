@@ -37,6 +37,10 @@ module BceExplorer
         .limit(limit)
     end
 
+    def update(query, update)
+      @col.update query, update
+    end
+
     # upsert document
     def upsert(query, update)
       @col.update query, update, upsert: true
