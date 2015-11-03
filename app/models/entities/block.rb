@@ -16,7 +16,7 @@ module BceExplorer
                        :txs do
       def self.create_from(params = {})
         new params['hash'], params['confirmations'], params['size'],
-            params['index'], params['version'], params['mint'],
+            params['height'], params['version'], params['mint'],
             params['merkleroot'], params['previousblockhash'],
             params['nextblockhash'], params['time'],
             params['difficulty'], params['flags'], params['tx']
