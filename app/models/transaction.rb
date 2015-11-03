@@ -1,6 +1,6 @@
 module BceExplorer
   # Transactions db storage
-  class TxList < Base
+  class Transaction < Base
     def initialize(dbh)
       super dbh
     end
@@ -14,8 +14,8 @@ module BceExplorer
 
     # get transaction
     def [](txid)
-      result = find txid
-      result.nil? ? nil : result['tx']
+      doc = find txid
+      doc.nil? ? nil : Entities::Transaction.create_from(doc['tx'])
     end
   end
 end
