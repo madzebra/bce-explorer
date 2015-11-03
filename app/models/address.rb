@@ -7,7 +7,7 @@ module BceExplorer
 
     # get address balance
     def [](address)
-      result = find_one address
+      result = find address
       balance = result['balance'] unless result.nil?
       # this code for situations when address document exists
       # but has no 'balance' property yet, because wallet upserted it
@@ -28,7 +28,7 @@ module BceExplorer
     end
 
     def exists?(address)
-      !find_one(address).nil?
+      !find(address).nil?
     end
   end
 end

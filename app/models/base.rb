@@ -15,8 +15,9 @@ module BceExplorer
 
     private
 
+    # find by _id
     # return result or return nil
-    def find_one(param)
+    def find(param)
       @col.find_one _id: param
     end
 

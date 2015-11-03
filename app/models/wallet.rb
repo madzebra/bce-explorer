@@ -41,7 +41,7 @@ module BceExplorer
 
     def id(address)
       query = address.is_a?(Array) ? { '$in' => address } : address
-      result = find_one query
+      result = find query
       return new_id if result.nil?
       return new_id if result['wallet'].nil?
       result['wallet']

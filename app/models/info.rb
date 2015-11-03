@@ -6,7 +6,7 @@ module BceExplorer
     end
 
     def blocks
-      result = find_one 'blockcount'
+      result = find 'blockcount'
       result.nil? ? 0 : result['count']
     end
 

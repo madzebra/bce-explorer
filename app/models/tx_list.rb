@@ -14,7 +14,7 @@ module BceExplorer
 
     # get transaction
     def [](txid)
-      result = find_one txid
+      result = find txid
       result.nil? ? nil : result['tx']
     end
   end
