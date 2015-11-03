@@ -1,5 +1,11 @@
 module BceExplorer
-  # Address balance storage
+  # Address db Storage
+  #
+  # _id - address
+  # sent - total sent coins
+  # received - total received coins
+  # minted - received from coinbase
+  # balance - final balance
   class Address < Base
     def initialize(dbh)
       super dbh
@@ -19,12 +25,6 @@ module BceExplorer
       query = { _id: address }
       update = { '$set' => { balance: balance } }
       upsert query, update
-    end
-
-    def top(count)
-      query = {}
-      order = { balance: :desc }
-      find_order_limit(query, order, count)
     end
 
     def exists?(address)
