@@ -1,5 +1,9 @@
 module BceExplorer
-  # guesstimated wallet storage
+  # Guesstimated Wallet Storage
+  #
+  # ... uses address db storage
+  # _id - address
+  # wallet - wallet id
   class Wallet < Base
     def initialize(dbh)
       super dbh, 'address'
@@ -17,12 +21,14 @@ module BceExplorer
       end
     end
 
-    # find top addresses with non-zero balance
+    # fetches wallet info
+    # returns top addresses with non-zero balance
     def fetch(wallet)
       addresses = find_all(wallet: wallet).map { |a| a['_id'] }
       query = { _id: { '$in' => addresses }, balance: { '$gt' => 1e-8 } }
       order = { balance: :desc }
       find_order_limit(query, order, 100)
+        .map { |doc| Entities::Address.create_from doc }
     end
 
     # size of the wallet
@@ -30,21 +36,26 @@ module BceExplorer
       super wallet: wallet
     end
 
-    # the largest wallets
+    # returns the largest wallets
     def top(count = 20)
       aggregate([
         { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
         { '$sort' => { total: -1 } },
         { '$limit' => count }
-      ])
+      ]).map do |doc|
+        wallet_id = doc['_id']
+        params = { 'id' => wallet_id, 'name' => name(wallet_id),
+                   'balance' => doc['total'], 'size' => count(wallet_id) }
+        Entities::Wallet.create_from params
+      end
     end
 
     def id(address)
       query = address.is_a?(Array) ? { '$in' => address } : address
-      result = find query
-      return new_id if result.nil?
-      return new_id if result['wallet'].nil?
-      result['wallet']
+      doc = find query
+      return new_id if doc.nil?
+      return new_id if doc['wallet'].nil?
+      doc['wallet']
     end
 
     def name(wallet)
