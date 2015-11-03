@@ -23,7 +23,7 @@ module BceExplorer
                when hash_or_index.is_a?(Integer) then find hash_or_index
                end
 
-      result.nil? ? nil : Entities::Block.create_from result['block']
+      result.nil? ? nil : Entities::Block.create_from(result['block'])
     end
   end
 end
