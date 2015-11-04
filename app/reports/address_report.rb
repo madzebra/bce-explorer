@@ -5,7 +5,7 @@ module BceExplorer
       @address = db.address
       @wallet = db.wallet
       @tx_address = db.tx_address
-      @tx_list = db.tx_list
+      @tx = db.tx
     end
 
     def call(address)
@@ -29,7 +29,7 @@ module BceExplorer
         'wallet_id' => wallet_id,
         'wallet_size' => @wallet.count(wallet_id),
         'tx_count' => @tx_address.count(address),
-        'tx' => @tx_address[address].map { |txid| @tx_list[txid] }.compact
+        'tx' => @tx.fetch(@tx_address[address])
       }
     end
   end
