@@ -66,8 +66,8 @@ module BceExplorer
     end
 
     get '/network' do
-      @network_info = @client.network_info
-      @network_peer = @client.network_peer_info
+      @network_info = @db.info.network
+      @network_peer = @db.info.peers
       haml :network
     end
 

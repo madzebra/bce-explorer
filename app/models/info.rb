@@ -26,5 +26,27 @@ module BceExplorer
       update = { '$set' => { value: value } }
       upsert query, update
     end
+
+    def network
+      result = find 'network_info'
+      result.nil? ? [] : result['info']
+    end
+
+    def network=(info)
+      query = { _id: 'network_info' }
+      update = { '$set' => { info: info } }
+      upsert query, update
+    end
+
+    def peers
+      result = find 'peers_info'
+      result.nil? ? [] : result['info']
+    end
+
+    def peers=(info)
+      query = { _id: 'peers_info' }
+      update = { '$set' => { info: info } }
+      upsert query, update
+    end
   end
 end
