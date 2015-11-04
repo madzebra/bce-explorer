@@ -3,15 +3,16 @@ module BceExplorer
   class DB
     include Mongo
 
-    attr_reader :info, :address, :wallet, :tx_address, :tx_list
+    attr_reader :info, :address, :block, :wallet, :tx_address, :tx
 
     def initialize(opts = nil)
       MongoClient.new(opts[:host], opts[:port]).db(opts[:dbname]).tap do |dbh|
         @info = Info.new dbh
         @address = Address.new dbh
+        @block = Block.new dbh
         @wallet = Wallet.new dbh
         @tx_address = TxAddress.new dbh
-        @tx_list = TxList.new dbh
+        @tx = Transaction.new dbh
       end
     end
   end
