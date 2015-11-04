@@ -30,20 +30,20 @@ module BceExplorer
     end
 
     get '/block/:blk' do
-      @block_info = @db.block[params['blk']]
+      @block_info = @reports.block.call params['blk']
       haml :block
     end
 
     get '/tx/:txid' do
-      @tx_info = @db.transaction[params['txid']]
+      @tx_info = @db.tx[params['txid']]
       haml :tx
     end
 
     get '/wallet/:wallet_id' do
+      @wallet_info = nil
       if @db.wallet.exists? params['wallet_id']
         @wallet_info = @reports.wallet.call params['wallet_id']
       end
-      @wallet_info ||= {}
       haml :wallet
     end
 
@@ -60,14 +60,7 @@ module BceExplorer
     end
 
     get '/wallets' do
-      @wallets = @db.wallet.top.map do |wallet|
-        {
-          'id' => wallet['_id'],
-          'name' => @db.wallet.name(wallet['_id']),
-          'size' => @db.wallet.count(wallet['_id']),
-          'balance' => wallet['total']
-        }
-      end
+      @wallets = @db.wallet.top
       haml :wallets
     end
 

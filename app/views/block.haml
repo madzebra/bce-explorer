@@ -1,38 +1,38 @@
-- if @block_info.empty? || @block_info['previousblockhash'].nil?
+- if @block_info.nil? || @block_info.prevhash.nil?
   %h2 Block Not Found
 - else
-  %h3 Details for Block ##{@block_info['height']}#{' (Genesis)' if @block_info['height'] == 1}
+  %h3 Details for Block ##{@block_info.height}#{' (Genesis)' if @block_info.height == 1}
   %table.table#details
     %tr
       %td Hash
       %td
         %ul.pager.block-pager
-          - unless @block_info['height'] == 1
+          - unless @block_info.height == 1
             %li.previous
-              %a{href: to_block(@block_info['previousblockhash']), title: 'previous block'}
+              %a{href: to_block(@block_info.prevhash), title: 'previous block'}
                 %span.fui-arrow-left
 
           %li.block-hash.hidden-xs.hidden-sm
-            %span{title: "#{@block_info['hash']}"}= @block_info['hash']
+            %span{title: "#{@block_info.hash}"}= @block_info.hash
 
           %li.block-hash.hidden-md.hidden-lg
-            %span{title: "#{@block_info['hash']}"}= shorten_hash @block_info['hash']
+            %span{title: "#{@block_info.hash}"}= shorten_hash @block_info.hash
 
-          - if @block_count > @block_info['height'].to_i
+          - if @block_count > @block_info.height.to_i
             %li.next
-              %a{href: to_block(@block_info['nextblockhash']), title: 'next block'}
+              %a{href: to_block(@block_info.nexthash), title: 'next block'}
                 %span.fui-arrow-right
 
     %tr
       %td Date/Time
       %td
-        = human_time @block_info['time']
-        =" <i>extracted by Proof of Stake</i>" if @block_info['flags'].include? 'proof-of-stake'
+        = human_time @block_info.time
+        =" <i>extracted by Proof of Stake</i>" if @block_info.pos?
     %tr
       %td Difficulty
-      %td= @block_info['difficulty']
+      %td= @block_info.difficulty
     %tr
       %td Transactions
-      %td= @block_info['tx'].length
+      %td= @block_info.tx.length
 
-  = partial :tx_list, locals: {tx_info: @block_info['tx'], title: 'Transactions'}
+  = partial :tx_list, locals: {tx_info: @block_info.tx, title: 'Transactions'}

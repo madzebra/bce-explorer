@@ -11,11 +11,11 @@
     %tbody
       - tx_info.each do |tx|
         %tr
-          %td= link_to_tx_short tx['txid']
+          %td= link_to_tx_short tx.txid
           %td
             %table.tx-detail-table
               %tbody
-                - tx['inputs'].each do |input|
+                - tx.inputs.each do |input|
                   %tr
                     %td
                       - if input['address'].include? "Generation"
@@ -26,7 +26,7 @@
           %td
             %table.tx-detail-table
               %tbody
-                - tx['outputs'].each do |output|
+                - tx.outputs.each do |output|
                   %tr
                     - if output['address'] == "stake"
                       %td Included in following transaction(s)

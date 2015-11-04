@@ -1,4 +1,4 @@
-- if @tx_info.empty?
+- if @tx_info.nil?
   %h3 Transaction Not Found
 - else
   %h3 Details for Transaction
@@ -6,16 +6,16 @@
     %tr
       %td Hash
       %td
-        %code#tx-hash= @tx_info['txid']
+        %code#tx-hash= @tx_info.txid
     %tr
-      %td Block Hash
-      %td= link_to_block(@tx_info['blockhash'])
+      %td Block
+      %td= link_to_block(@tx_info.blockindex)
     %tr
       %td Confirmations
-      %td= @tx_info['confirmations']
+      %td= (@block_count - @tx_info.blockindex + 1)
     %tr
       %td Date/Time
-      %td= human_time @tx_info['time']
+      %td= human_time @tx_info.time
 
   %h3 Inputs
   %table.table
@@ -24,7 +24,7 @@
         %th From
         %th Amount
     %tbody
-      - @tx_info['inputs'].each do |input|
+      - @tx_info.inputs.each do |input|
         %tr
           %td
             - if input['address'].include? "Generation"
@@ -40,7 +40,7 @@
         %th To
         %th Amount
     %tbody
-      - @tx_info['outputs'].each do |output|
+      - @tx_info.outputs.each do |output|
         - unless output['address'] == "stake"
           %tr
             %td= link_to_address output['address']

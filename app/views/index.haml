@@ -9,9 +9,9 @@
       %th Transactions
       %th.hidden-xs Difficulty
   %tbody
-    - @blocks.each do |blk|
+    - @blocks.each do |block|
       %tr
-        %td= link_to_block blk['height']
-        %td= time_ago blk['time']
-        %td= blk['tx'].length
-        %td.hidden-xs= blk['difficulty']
+        %td= link_to_block block.height
+        %td= time_ago block.time
+        %td= block.tx.length
+        %td.hidden-xs= block.difficulty

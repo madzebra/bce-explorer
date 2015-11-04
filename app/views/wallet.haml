@@ -1,4 +1,4 @@
-- if @wallet_info.empty?
+- if @wallet_info.nil?
   %h3 Wallet Not Found
 - else
   %h3 Guesstimated Wallet
@@ -6,10 +6,10 @@
   %table.table
     %tr
       %td Balance
-      %td= coin_amount @wallet_info['balance']
+      %td= coin_amount @wallet_info.balance
     %tr
       %td Addresses
-      %td #{@wallet_info['addresses'].count} with non zero-balance<br />#{@wallet_info['size']} known
+      %td #{@wallet_info.addresses.count} with non zero-balance<br />#{@wallet_info.size} known
 
   %h3 Addresses with non-zero balance
   %table.table
@@ -20,9 +20,9 @@
         %th Balance
         %th.hidden-xs.hidden-sm Percent of coins
     %tbody
-      - @wallet_info['addresses'].each_with_index do |address, index|
+      - @wallet_info.addresses.each_with_index do |address, index|
         %tr
           %td.text-right= (index + 1)
-          %td= link_to_address address['address']
-          %td= coin_amount address['balance']
-          %td.hidden-xs.hidden-sm= coin_percent address['balance']
+          %td= link_to_address address.address
+          %td= coin_amount address.balance
+          %td.hidden-xs.hidden-sm= coin_percent address.balance
