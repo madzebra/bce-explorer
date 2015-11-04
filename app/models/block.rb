@@ -30,7 +30,7 @@ module BceExplorer
       query = {}
       order = { _id: :desc }
       find_order_limit(query, order, limit)
-        .map { |block| Entities::Block.create_from block }
+        .map { |block| Entities::Block.create_from block['block'] }
     end
   end
 end
