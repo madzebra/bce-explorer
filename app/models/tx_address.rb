@@ -14,6 +14,7 @@ module BceExplorer
       super address: address
     end
 
+    # get txid list by address
     def [](address)
       query = { address: address }
       order = { _id: :desc }
