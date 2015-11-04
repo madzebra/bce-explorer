@@ -8,7 +8,7 @@ module BceExplorer
                          :wallet,
                          :txs do
       def self.create_from(params = {})
-        new params['address'],
+        new params['_id'],
             (params['sent'] || 0.0),
             (params['received'] || 0.0),
             (params['balance'] || 0.0),
