@@ -13,13 +13,14 @@ module BceExplorer
                        :time,
                        :difficulty,
                        :flags,
-                       :txs do
+                       :tx do
       def self.create_from(params = {})
         new params['hash'], params['confirmations'], params['size'],
             params['height'], params['version'], params['mint'],
             params['merkleroot'], params['previousblockhash'],
             params['nextblockhash'], params['time'],
-            params['difficulty'], params['flags'], params['tx']
+            params['difficulty'], params['flags'],
+            (params['tx'] || [])
       end
 
       def pos?
