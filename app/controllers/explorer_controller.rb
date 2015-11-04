@@ -23,10 +23,10 @@ module BceExplorer
     end
 
     get '/address/:address' do
+      @address_info = nil
       if @client.address(params['address']).valid?
         @address_info = @reports.address.call params['address']
       end
-      @address_info ||= {}
       haml :address
     end
 

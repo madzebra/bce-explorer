@@ -1,27 +1,30 @@
-- if @address_info.empty?
+- if @address_info.nil?
   %h3 Address Not Found
 - else
   %h3 Details for Address
   %table.table
     %tr
       %td Address
-      %td= @address_info['address']
+      %td= @address_info.address
+    %tr
+      %td Total Received
+      %td= coin_amount @address_info.received
     %tr
       %td Balance
-      %td= coin_amount @address_info['balance']
+      %td= coin_amount @address_info.balance
     %tr
       %td Guesstimated Wallet
       %td
-        %a{href: url("/wallet/#{@address_info['wallet_id']}")}
-          - if @address_info['wallet_size'] == 1
+        %a{href: url("/wallet/#{@address_info.wallet}")}
+          - if @address_info.wallet_size == 1
             one address
           - else
-            #{@address_info['wallet_size']} addresses
+            #{@address_info.wallet_size} addresses
     %tr
       %td Percent of coins
-      %td= coin_percent @address_info['balance']
+      %td= coin_percent @address_info.balance
     %tr
       %td Transactions
-      %td= @address_info['tx_count']
+      %td= @address_info.tx_count
 
-  = partial :tx_list, locals: {tx_info: @address_info['tx'], title: "Last 20 transactions"}
+  = partial :tx_list, locals: {tx_info: @address_info.tx, title: "Last 20 transactions"}

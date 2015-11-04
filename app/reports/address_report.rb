@@ -10,27 +10,23 @@ module BceExplorer
 
     def call(address)
       if @address.exists? address
-        info(address)
+        info_about address
       else
-        { 'address' => address, 'balance' => 0.0,
-          'wallet_id' => '', 'wallet_knowns' => 0,
-          'tx_count' => 0, 'tx' => nil }
+        params = { 'address' => address, 'wallet' => '',
+                   'wallet_size' => 0, 'tx_count' => 0, 'tx' => [] }
+        Entities::Address.create_from params
       end
     end
 
     private
 
-    def info(address)
+    def info_about(address)
       wallet_id = @wallet.id address
-
-      {
-        'address' => address,
-        'balance' => @address[address],
-        'wallet_id' => wallet_id,
-        'wallet_size' => @wallet.count(wallet_id),
-        'tx_count' => @tx_address.count(address),
-        'tx' => @tx.fetch(@tx_address[address])
-      }
+      address_info = @address.fetch address
+      address_info['wallet_size'] = @wallet.count wallet_id
+      address_info['tx_count'] = @tx_address.count address
+      address_info['tx'] = @tx.fetch @tx_address[address]
+      address_info
     end
   end
 end
