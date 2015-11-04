@@ -39,13 +39,13 @@ module BceExplorer
     # returns the largest wallets
     def top(count = 20)
       aggregate([
-        { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
+        { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' },
+                        count: { '$sum' => 1 } } },
         { '$sort' => { total: -1 } },
         { '$limit' => count }
       ]).map do |doc|
-        wallet_id = doc['_id']
-        params = { 'id' => wallet_id, 'name' => name(wallet_id),
-                   'balance' => doc['total'], 'size' => count(wallet_id) }
+        params = { 'id' => doc['_id'], 'name' => name(doc['_id']),
+                   'balance' => doc['total'], 'size' => doc['count'] }
         Entities::Wallet.create_from params
       end
     end
