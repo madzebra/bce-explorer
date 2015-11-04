@@ -18,7 +18,7 @@ module BceExplorer
     def [](address)
       query = { address: address }
       order = { _id: :desc }
-      limit = 20
+      limit = 50
       find_order_limit(query, order, limit).map { |tx| tx['txid'] }
     end
   end

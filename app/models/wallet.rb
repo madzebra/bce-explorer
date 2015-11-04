@@ -28,8 +28,9 @@ module BceExplorer
       order = { balance: :desc }
       result = find_order_limit query, order, 50
       addresses = result.map { |doc| Entities::Address.create_from(doc) }
-      params = { 'id' => wallet, 'name' => name(wallet), 'balance' => balance,
-                 'size' => count(wallet), 'addresses' => addresses }
+      params = { 'id' => wallet, 'name' => name(wallet),
+                 'balance' => balance(wallet), 'size' => count(wallet),
+                 'addresses' => addresses }
       Entities::Wallet.create_from params
     end
 
