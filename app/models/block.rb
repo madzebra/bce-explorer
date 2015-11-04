@@ -25,5 +25,12 @@ module BceExplorer
 
       result.nil? ? nil : Entities::Block.create_from(result['block'])
     end
+
+    def last(limit = 20)
+      query = {}
+      order = { _id: :desc }
+      find_order_limit(query, order, limit)
+        .map { |block| Entities::Block.create_from block }
+    end
   end
 end
