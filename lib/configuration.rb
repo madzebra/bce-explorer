@@ -13,7 +13,6 @@ module BceExplorer
       @info = coin_config.select { |k, _| FRONTEND_KEYS.include? k }
       @rpc =  coin_config.select { |k, _| k[0, 5] == '_rpc_' }
       load_db_config
-      load_cache_config
     end
 
     def client
@@ -22,10 +21,6 @@ module BceExplorer
 
     def db
       DB.new db_options
-    end
-
-    def cache
-      Cache.new cache_options, db_options[:dbname]
     end
 
     private
@@ -47,19 +42,8 @@ module BceExplorer
       }
     end
 
-    def cache_options
-      {
-        host: @_cache_conf['host'] || 'localhost',
-        port: @_cache_conf['port'] || 6_379
-      }
-    end
-
     def load_db_config
       @_db_conf = YAML.load_file Env.mongo_conf_file
-    end
-
-    def load_cache_config
-      @_cache_conf = YAML.load_file Env.redis_conf_file
     end
   end
 end
