@@ -18,7 +18,7 @@ module BceExplorer
 
     def money_supply
       result = find 'money_supply'
-      result.nil? ? (10**10).to_f : result['money_supply']
+      result.nil? ? (10**10).to_f : result['value']
     end
 
     def money_supply=(value)
