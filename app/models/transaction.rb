@@ -20,5 +20,11 @@ module BceExplorer
       doc = find txid
       doc.nil? ? nil : Entities::Transaction.create_from(doc['tx'])
     end
+
+    # fetch list txs
+    def fetch(txids = [])
+      query = { _id: { '$in' => txids } }
+      find_all(query).map { |doc| Entities::Transaction.create_from doc['tx'] }
+    end
   end
 end
