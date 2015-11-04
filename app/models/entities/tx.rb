@@ -9,7 +9,7 @@ module BceExplorer
                              :outputs do
       def self.create_from(params = {})
         new params['txid'], params['version'], params['time'],
-            params['blockindex'], params['confirmations'],
+            params['blockindex'],
             params['inputs'], params['outputs']
       end
     end
