@@ -8,9 +8,10 @@ module BceExplorer
 
     def sync!
       ((@db.info.blocks + 1)..@be.block.count).each do |blk_num|
-        @be.block(blk_num).decode_with_tx['tx'].each do |tx|
+        block = @be.block(blk_num).decode_with_tx
+        @db.block << block
+        block['tx'].each do |tx|
           sync_transaction tx
-          @db.tx_list << tx
         end
         @db.info.blocks = blk_num
       end
@@ -19,16 +20,18 @@ module BceExplorer
     private
 
     def sync_transaction(tx)
+      tx['blockindex'] = blk_num
       sync_inputs tx
       sync_outputs tx
       sync_wallets tx
+      @db.tx << tx
     end
 
     def sync_inputs(tx)
       tx['inputs'].each do |input|
         address = input['address']
         next if generation? address
-        @db.address[address] -= input['value'].to_f
+        @db.address.sub address, input['value'].to_f
         @db.tx_address << { address: address, txid: tx['txid'] }
       end
     end
@@ -37,7 +40,7 @@ module BceExplorer
       tx['outputs'].each do |output|
         address = output['address']
         next if stake? address
-        @db.address[address] += output['value'].to_f
+        @db.address.add address, output['value'].to_f
         @db.tx_address << { address: address, txid: tx['txid'] }
       end
     end
