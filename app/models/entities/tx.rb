@@ -4,14 +4,13 @@ module BceExplorer
     Transaction = Struct.new :txid,
                              :version,
                              :time,
-                             :blockhash,
-                             :confirmations,
-                             :vin,
-                             :vout do
+                             :blockindex,
+                             :inputs,
+                             :outputs do
       def self.create_from(params = {})
         new params['txid'], params['version'], params['time'],
-            params['blockhash'], params['confirmations'],
-            params['vin'], params['vout']
+            params['blockindex'], params['confirmations'],
+            params['inputs'], params['outputs']
       end
     end
   end
