@@ -8,6 +8,7 @@ module BceExplorer
     def call(blk)
       res = @block[blk]
       res.tx.map! { |tx| Entities::Transaction.create_from tx } unless res.nil?
+      res
     end
   end
 end
