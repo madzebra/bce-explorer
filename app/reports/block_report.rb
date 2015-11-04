@@ -6,6 +6,8 @@ module BceExplorer
     end
 
     def call(blk)
+      # this snippet to check if given param is int
+      blk = blk.to_i if blk.to_i.to_s == blk
       res = @block[blk]
       res.tx.map! { |tx| Entities::Transaction.create_from tx } unless res.nil?
       res
