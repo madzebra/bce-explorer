@@ -15,5 +15,16 @@ module BceExplorer
       update = { '$set' => { count: count } }
       upsert query, update
     end
+
+    def money_supply
+      result = find 'money_supply'
+      result.nil? ? (10**10).to_f : result['money_supply']
+    end
+
+    def money_supply=(value)
+      query = { _id: 'money_supply' }
+      update = { '$set' => { value: value } }
+      upsert query, update
+    end
   end
 end
