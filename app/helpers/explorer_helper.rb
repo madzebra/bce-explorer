@@ -10,9 +10,7 @@ module BceExplorer
     end
 
     def coin_percent(coins)
-      supply = @cache.cache_for('money_supply', 60 * 60) do # cache for an hour
-        @client.money_supply.to_s
-      end.to_f
+      supply = @db.info.money_supply
       format('%0.02f %', (coins.abs / supply) * 100.0)
     end
 

@@ -5,6 +5,7 @@ module BceExplorer
 
     before do
       @block_count = @db.info.blocks
+      @money_supply = @db.info.money_supply
     end
 
     def initialize(coin = nil)
