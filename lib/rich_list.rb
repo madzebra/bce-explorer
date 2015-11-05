@@ -11,7 +11,11 @@ module BceExplorer
       ((@db.info.blocks + 1)..@block_count).each do |blk_num|
         block = @be.block(blk_num).decode_with_tx
         @db.block << block
-        block['tx'].each { |tx| sync_transaction tx, blk_num }
+        block['tx'].each_with_index do |tx, i|
+          is_stake = block['flags'].include? 'stake'
+          tx['type'] = ((is_stake && (i < 2)) || (i < 1)) ? 'minted' : 'out'
+          sync_transaction tx, blk_num
+        end
       end
       sync_info
     end
@@ -38,7 +42,8 @@ module BceExplorer
         address = input['address']
         next if generation? address
         @db.address.sub address, input['value'].to_f
-        @db.tx_address << { address: address, txid: tx['txid'], type: 'in' }
+        type = (tx['type'] == 'minted') ? 'minted' : 'in'
+        @db.tx_address << { address: address, txid: tx['txid'], type: type }
       end
     end
 
@@ -47,7 +52,8 @@ module BceExplorer
         address = output['address']
         next if stake? address
         @db.address.add address, output['value'].to_f
-        @db.tx_address << { address: address, txid: tx['txid'], type: 'out' }
+        type = (tx['type'] == 'minted') ? 'minted' : 'out'
+        @db.tx_address << { address: address, txid: tx['txid'], type: type }
       end
     end
 

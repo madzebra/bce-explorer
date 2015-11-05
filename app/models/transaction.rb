@@ -22,11 +22,15 @@ module BceExplorer
     end
 
     # fetch list txs
-    def fetch(txids = [])
-      query = { _id: { '$in' => txids } }
+    def fetch(txs = {})
+      query = { _id: { '$in' => txs.keys } }
       find_all(query)
         .sort('$natural' => -1)
-        .map { |doc| Entities::Transaction.create_from doc['tx'] }
+        .map do |doc|
+          tx = doc['tx']
+          tx['type'] = txs[tx['txid']]
+          Entities::Transaction.create_from tx
+        end
     end
   end
 end

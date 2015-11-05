@@ -2,28 +2,34 @@
 - if tx_info.nil? or tx_info.empty?
   %h3 No transactions found
 - else
-  %table.table#transactions
-    %thead
-      %tr
-        %th Hash
-        %th From (Amount)
-        %th To (Amount)
-    %tbody
-      - tx_info.each do |tx|
-        %tr
-          %td= link_to_tx_short tx.txid
-          %td
-            %table.tx-detail-table
-              %tbody
-                - tx.inputs.each do |input|
-                  %tr
-                    %td
-                      - if input['address'].include? "Generation"
-                        = input['address']
-                      - else
-                        = link_to_address input['address']
-                    %td.amount= coin_amount input['value'] unless input['address'].include? "Generation"
-          %td
+  - tx_info.each do |tx|
+    .panel.panel-default
+      .panel-heading
+        .row
+          .col-md-8.col-lg-8
+            %strong= link_to_tx tx.txid
+          .col-md-4.col-lg-4
+            %strong.pull-right= human_time tx.time
+
+      .panel-body
+        .row
+          .col-md-4.col-lg-4
+            - tx.inputs.map { |input| input['address'] }.uniq.each do |address|
+              %p
+                - if address.include? "Generation"
+                  = address
+                - else
+                  = link_to_address address
+
+          .col-md-2.col-lg-2
+            .pull-right
+              - image = (tx.type == 'in') ? 'red' : 'green'
+              - if tx.type == 'minted'
+                %img{src: "/img/minted.png", title: 'Minted'}
+              - else
+                %img{src: "/img/arrow_right_#{image}.png", title: 'Sent/Received'}
+
+          .col-md-6.col-lg-6
             %table.tx-detail-table
               %tbody
                 - tx.outputs.each do |output|
