@@ -14,4 +14,11 @@
         %td= link_to_block block.height
         %td= time_ago block.time
         %td= block.tx.length
-        %td.hidden-xs= block.difficulty
+        %td.hidden-xs
+          = block.difficulty
+          - if block.pos?
+            %span.label.label-success Proof of Stake
+          - else
+            %span.label.label-primary Proof of Work
+
+
