@@ -38,7 +38,7 @@ module BceExplorer
         address = input['address']
         next if generation? address
         @db.address.sub address, input['value'].to_f
-        @db.tx_address << { address: address, txid: tx['txid'] }
+        @db.tx_address << { address: address, txid: tx['txid'], type: 'in' }
       end
     end
 
@@ -47,7 +47,7 @@ module BceExplorer
         address = output['address']
         next if stake? address
         @db.address.add address, output['value'].to_f
-        @db.tx_address << { address: address, txid: tx['txid'] }
+        @db.tx_address << { address: address, txid: tx['txid'], type: 'out' }
       end
     end
 
