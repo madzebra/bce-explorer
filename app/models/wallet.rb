@@ -40,7 +40,7 @@ module BceExplorer
     end
 
     # returns the largest wallets
-    def top(count = 20)
+    def top(count = 50)
       aggregate([
         { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' },
                         count: { '$sum' => 1 } } },
