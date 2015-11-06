@@ -26,6 +26,17 @@ module BceExplorer
       result.nil? ? nil : Entities::Block.create_from(result['block'])
     end
 
+    def valid?(hash_or_index)
+      return false if hash_or_index.length > 100
+      if hash_or_index.to_i.to_s == hash_or_index
+        !self[hash_or_index.to_i].nil?
+      elsif hash_or_index[/\w+/] == hash_or_index
+        !self[hash_or_index].nil?
+      else
+        false
+      end
+    end
+
     def last(limit = 50)
       query = {}
       order = { _id: :desc }

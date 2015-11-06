@@ -51,9 +51,9 @@ module BceExplorer
       if params['q'].is_a? String # in case of: /search?q[]=foo
         query = params['q'].strip
         if query.length > 0
-          redirect to_tx(query) if @client.transaction(query).valid?
-          redirect to_block(query) if @client.block(query).valid?
-          redirect to_address(query) if @client.address(query).valid?
+          redirect to_tx(query) if @db.tx.valid?(query)
+          redirect to_block(query) if @db.block.valid?(query)
+          redirect to_address(query) if Base58Check.valid?(query)
         end
       end
       haml :search_fail

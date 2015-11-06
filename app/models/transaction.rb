@@ -31,5 +31,10 @@ module BceExplorer
           Entities::Transaction.create_from tx
         end
     end
+
+    def valid?(txid)
+      return false if txid.length > 100
+      (txid[/\w+/] == txid) && !self[txid].nil?
+    end
   end
 end
