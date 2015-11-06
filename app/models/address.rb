@@ -11,18 +11,14 @@ module BceExplorer
       super dbh
     end
 
-    def add(address, value)
+    def add(address, value, minted)
       self[address] += value
-      do_update 'received', address, value
+      do_update 'received', address, value unless minted
     end
 
-    def sub(address, value)
+    def sub(address, value, minted)
       self[address] -= value
-      do_update 'sent', address, value
-    end
-
-    def minted(address, value)
-      do_update 'minted', address, value
+      do_update 'sent', address, value unless minted
     end
 
     # get address balance

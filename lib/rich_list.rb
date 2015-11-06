@@ -12,8 +12,7 @@ module BceExplorer
         block = @be.block(blk_num).decode_with_tx
         @db.block << block
         block['tx'].each_with_index do |tx, i|
-          is_stake = block['flags'].include? 'stake'
-          tx['type'] = ((is_stake && (i < 2)) || (i < 1)) ? 'minted' : 'out'
+          tx['type'] = calc_tx_type block, i
           sync_transaction tx, blk_num
         end
       end
@@ -41,8 +40,8 @@ module BceExplorer
       tx['inputs'].each do |input|
         address = input['address']
         next if generation? address
-        @db.address.sub address, input['value'].to_f
         type = (tx['type'] == 'minted') ? 'minted' : 'in'
+        @db.address.sub address, input['value'].to_f, (type == 'minted')
         @db.tx_address << { address: address, txid: tx['txid'], type: type }
       end
     end
@@ -51,8 +50,8 @@ module BceExplorer
       tx['outputs'].each do |output|
         address = output['address']
         next if stake? address
-        @db.address.add address, output['value'].to_f
         type = (tx['type'] == 'minted') ? 'minted' : 'out'
+        @db.address.add address, output['value'].to_f, (type == 'minted')
         @db.tx_address << { address: address, txid: tx['txid'], type: type }
       end
     end
@@ -76,6 +75,14 @@ module BceExplorer
 
     def generation?(address)
       address.include? 'Generation'
+    end
+
+    def calc_tx_type(block, i)
+      if ((block['flags'].include? 'stake') && (i < 2)) || (i < 1)
+        'minted'
+      else
+        'out'
+      end
     end
   end
 end
