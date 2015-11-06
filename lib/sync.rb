@@ -1,12 +1,12 @@
 module BceExplorer
-  # richlist sync routine
-  class RichList
+  # sync db routines
+  class Sync
     def initialize(blockexplorer:, database:)
       @be = blockexplorer
       @db = database
     end
 
-    def sync!
+    def sync_db
       @block_count = @be.block.count
       ((@db.info.blocks + 1)..@block_count).each do |blk_num|
         block = @be.block(blk_num).decode_with_tx

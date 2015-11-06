@@ -21,17 +21,21 @@ module BceExplorer
       HomeController.new @coins
     end
 
-    def sync_rich_list
+    def db_index
+      @coins.each { |_, coin| coin.db.create_index }
+    end
+
+    def db_sync
       @coins.each do |tag, coin|
         puts "Syncing coin #{tag.upcase} ..."
-        rich_list(coin.client, coin.db).sync!
+        sync(coin.client, coin.db).sync_db
       end
     end
 
     private
 
-    def rich_list(client, db)
-      RichList.new blockexplorer: client, database: db
+    def sync(client, db)
+      Sync.new blockexplorer: client, database: db
     end
   end
 end
