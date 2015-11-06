@@ -24,7 +24,7 @@ module BceExplorer
 
     get '/address/:address' do
       @address_info = nil
-      if @client.address(params['address']).valid?
+      if Base58Check.valid? params['address']
         @address_info = @reports.address.call params['address']
       end
       haml :address
