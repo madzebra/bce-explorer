@@ -51,9 +51,9 @@ module BceExplorer
     def do_update(param, address, value)
       doc = find address
       return if doc.nil?
-      new_mint = (doc[param] || 0.0) + value
+      new_value = (doc[param] || 0.0) + value
       query = { _id: address }
-      change = { '$set' => { param => new_mint } }
+      change = { '$set' => { param => new_value } }
       update query, change
     end
   end

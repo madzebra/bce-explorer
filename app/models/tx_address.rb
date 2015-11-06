@@ -18,9 +18,8 @@ module BceExplorer
     def [](address)
       query = { address: address }
       order = { _id: :desc }
-      limit = 50
       result = {}
-      find_order_limit(query, order, limit).each do |tx|
+      find_order_limit(query, order, 50).each do |tx|
         result[tx['txid']] = tx['type']
       end
       result

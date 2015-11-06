@@ -28,10 +28,10 @@ module BceExplorer
       order = { balance: :desc }
       result = find_order_limit query, order, 50
       addresses = result.map { |doc| Entities::Address.create_from(doc) }
-      params = { 'id' => wallet, 'name' => name(wallet),
-                 'balance' => balance(wallet), 'size' => count(wallet),
-                 'addresses' => addresses }
-      Entities::Wallet.create_from params
+      Entities::Wallet.create_from 'id' => wallet, 'name' => name(wallet),
+                                   'balance' => balance(wallet),
+                                   'size' => count(wallet),
+                                   'addresses' => addresses
     end
 
     # size of the wallet
@@ -56,8 +56,7 @@ module BceExplorer
     def id(address)
       query = address.is_a?(Array) ? { '$in' => address } : address
       doc = find query
-      return new_id if doc.nil?
-      return new_id if doc['wallet'].nil?
+      return new_id if doc.nil? || doc['wallet'].nil?
       doc['wallet']
     end
 
@@ -68,17 +67,15 @@ module BceExplorer
     end
 
     def balance(wallet)
-      balance = 0.0
       aggregate([
         { '$match' => { wallet: wallet } },
         { '$group' => { _id: '$wallet', total: { '$sum' => '$balance' } } },
         { '$limit' => 1 }
-      ]).map { |doc| balance += doc['total'] }
-      balance
+      ]).inject(0.0) { |a, e| a + e['total'] }
     end
 
     def exists?(wallet)
-      find_all(wallet: wallet).count > 0
+      count(wallet) > 0
     end
 
     private

@@ -23,8 +23,7 @@ module BceExplorer
 
     # fetch list txs
     def fetch(txs = {})
-      query = { _id: { '$in' => txs.keys } }
-      find_all(query)
+      find_all(_id: { '$in' => txs.keys })
         .sort('$natural' => -1)
         .map do |doc|
           tx = doc['tx']

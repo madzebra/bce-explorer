@@ -11,7 +11,6 @@ module BceExplorer
     def initialize(coin = nil)
       fail if coin.nil?
       @db = coin.db
-      @client = coin.client
       @coin_info = coin.info
       @reports = Reports.new @db
       super
@@ -43,7 +42,7 @@ module BceExplorer
     get '/wallet/:wallet_id' do
       @wallet_info = nil
       if @db.wallet.exists? params['wallet_id']
-        @wallet_info = @reports.wallet.call params['wallet_id']
+        @wallet_info = @db.wallet.fetch params['wallet_id']
       end
       haml :wallet
     end

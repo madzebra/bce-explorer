@@ -12,9 +12,9 @@ module BceExplorer
       if @address.exists? address
         info_about address
       else
-        params = { 'address' => address, 'wallet' => '',
-                   'wallet_size' => 0, 'tx_count' => 0, 'tx' => [] }
-        Entities::Address.create_from params
+        Entities::Address.create_from 'address' => address,
+                                      'wallet' => '', 'wallet_size' => 0,
+                                      'tx_count' => 0, 'tx' => []
       end
     end
 

@@ -6,7 +6,6 @@ module BceExplorer
     def initialize(db)
       @address = AddressReport.new db
       @block = BlockReport.new db
-      @wallet = WalletReport.new db
     end
   end
 end
