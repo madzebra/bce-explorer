@@ -4,19 +4,16 @@
   %h3 Details for Address
   %table.table
     %tr
-      %td
-        %strong Address
+      %th Address
       %td
         %code= @address_info.address
 
     %tr
-      %td
-        %strong Final Balance
+      %th Final Balance
       %td= coin_amount @address_info.balance
 
     %tr
-      %td
-        %strong Guesstimated Wallet
+      %th Guesstimated Wallet
       %td
         %a{href: url("/wallet/#{@address_info.wallet}")}
           - if @address_info.wallet_size == 1
@@ -25,28 +22,24 @@
             #{@address_info.wallet_size} addresses
 
     %tr
-      %td
-        %strong Total Received
+      %th Total Received
       %td= coin_amount @address_info.received
 
     %tr
-      %td
-        %strong Total Sent
+      %th Total Sent
       %td= coin_amount @address_info.sent
 
     - minted = @address_info.balance - (@address_info.received - @address_info.sent)
     %tr
-      %td
-        %strong Minted
+      %th Minted
       %td= coin_amount minted
+
     %tr
-      %td
-        %strong Percent of coins
+      %th Percent of coins
       %td= coin_percent @address_info.balance
 
     %tr
-      %td
-        %strong Transactions count
+      %th Transactions count
       %td= @address_info.tx_count
 
   = partial :tx_list, locals: {tx_info: @address_info.tx, title: "Last 50 transactions"}

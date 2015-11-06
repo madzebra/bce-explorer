@@ -5,10 +5,10 @@
   %div.alert.alert-info This feature is experimental and inaccurate! 
   %table.table
     %tr
-      %td Balance
+      %th Balance
       %td= coin_amount @wallet_info.balance
     %tr
-      %td Addresses
+      %th Addresses
       %td #{@wallet_info.addresses.count} with non zero-balance<br />#{@wallet_info.size} known
 
   %h3 Addresses with non-zero balance

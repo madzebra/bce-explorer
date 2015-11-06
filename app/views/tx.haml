@@ -4,29 +4,24 @@
   %h3 Details for Transaction
   %table.table
     %tr
-      %td
-        %strong Hash
+      %th Hash
       %td
         %code#tx-hash= @tx_info.txid
 
     %tr
-      %td
-        %strong Included In Blocks
+      %th Included In Blocks
       %td= link_to_block(@tx_info.blockindex)
 
     %tr
-      %td
-        %strong Timestamp
+      %th Timestamp
       %td= human_time @tx_info.time
 
     %tr
-      %td
-        %strong Total Output
+      %th Total Output
       %td= coin_amount @tx_info.outputs.reject { |e| e['address'] == 'stake' }.inject(0.0) { |a, e| a + e['value'] }
 
     %tr
-      %td
-        %strong Confirmations
+      %th Confirmations
       %td= (@block_count - @tx_info.blockindex + 1)
 
   %row

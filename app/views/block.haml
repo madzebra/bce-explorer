@@ -4,8 +4,7 @@
   %h3 Details for Block ##{@block_info.height}#{' (Genesis)' if @block_info.height == 1}
   %table.table#details
     %tr
-      %td
-        %strong Hash
+      %th Hash
       %td
         %ul.pager.block-pager
           - unless @block_info.height == 1
@@ -25,13 +24,11 @@
                 %span.fui-arrow-right
 
     %tr
-      %td
-        %strong Timestamp
+      %th Timestamp
       %td= human_time @block_info.time
 
     %tr
-      %td
-        %strong Difficulty
+      %th Difficulty
       %td
         = @block_info.difficulty
         - if @block_info.pos?
@@ -40,19 +37,16 @@
           %span.label.label-primary Proof of Work
 
     %tr
-      %td
-        %strong Mint
+      %th Mint
       %td
         = coin_amount @block_info.mint
 
     %tr
-      %td
-        %strong Size
+      %th Size
       %td= @block_info.size
 
     %tr
-      %td
-        %strong Transactions
+      %th Transactions
       %td= @block_info.tx.length
 
   = partial :tx_list, locals: {tx_info: @block_info.tx, title: 'Transactions'}
