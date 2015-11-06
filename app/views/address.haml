@@ -34,12 +34,6 @@
         %strong Total Sent
       %td= coin_amount @address_info.sent
 
-    - minted = @address_info.balance - (@address_info.received - @address_info.sent)
-    %tr
-      %td
-        %strong Minted
-      %td= coin_amount minted
-
     %tr
       %td
         %strong Percent of coins
