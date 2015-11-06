@@ -8,10 +8,6 @@ module BceExplorer
         "#{Env.root}/config/mongo.yml"
       end
 
-      def redis_conf_file
-        "#{Env.root}/config/redis.yml"
-      end
-
       def coins_path
         "#{Env.root}/config/coins"
       end
