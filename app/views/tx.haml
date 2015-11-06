@@ -4,44 +4,63 @@
   %h3 Details for Transaction
   %table.table
     %tr
-      %td Hash
+      %td
+        %strong Hash
       %td
         %code#tx-hash= @tx_info.txid
+
     %tr
-      %td Block
+      %td
+        %strong Included In Blocks
       %td= link_to_block(@tx_info.blockindex)
+
     %tr
-      %td Confirmations
-      %td= (@block_count - @tx_info.blockindex + 1)
-    %tr
-      %td Date/Time
+      %td
+        %strong Timestamp
       %td= human_time @tx_info.time
 
-  %h3 Inputs
-  %table.table
-    %thead
-      %tr
-        %th From
-        %th Amount
-    %tbody
-      - @tx_info.inputs.each do |input|
-        %tr
-          %td
-            - if input['address'].include? "Generation"
-              = input['address']
-            - else
-              = link_to_address input['address']
-          %td= coin_amount input['value']
+    %tr
+      %td
+        %strong Total Output
+      %td= coin_amount @tx_info.outputs.reject { |e| e['address'] == 'stake' }.inject(0.0) { |a, e| a + e['value'] }
 
-  %h3 Outputs
-  %table.table
-    %thead
-      %tr
-        %th To
-        %th Amount
-    %tbody
-      - @tx_info.outputs.each do |output|
-        - unless output['address'] == "stake"
+    %tr
+      %td
+        %strong Confirmations
+      %td= (@block_count - @tx_info.blockindex + 1)
+
+  %row
+    .col-xs-12.col-sm-6.col-md-6.col-lg-6
+      %h3 Inputs
+      %table.table
+        %thead
           %tr
-            %td= link_to_address output['address']
-            %td= coin_amount output['value']
+            %th From
+            %th Amount
+        %tbody
+          - @tx_info.inputs.each do |input|
+            %tr
+              %td
+                - if input['address'].include? "Generation"
+                  = input['address']
+                - else
+                  = link_to_address input['address']
+              %td= coin_amount input['value']
+
+    .col-xs-12.col-sm-6.col-md-6.col-lg-6
+      %h3 Outputs
+      %table.table
+        %thead
+          %tr
+            %th To
+            %th Amount
+        %tbody
+          - @tx_info.outputs.each do |output|
+            - if output['address'] == "stake"
+              %tr
+                %td nonstandart
+                %td
+            - else
+              %tr
+                %td= link_to_address output['address']
+                %td= coin_amount output['value']
