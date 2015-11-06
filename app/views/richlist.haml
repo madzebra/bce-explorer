@@ -16,7 +16,5 @@
     %tr
       %td
       %td{colspan: 3}
-        - if @top === 20
-          %a{href: url("/top50")} Show Top 50
-        - else
-          %a{href: url("/top20")} Show Top 20
+        - if @top === 100
+          %a{href: url("/top250")} Show Top 250

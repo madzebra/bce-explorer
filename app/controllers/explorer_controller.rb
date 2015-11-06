@@ -71,12 +71,12 @@ module BceExplorer
       haml :network
     end
 
-    get '/top20' do
-      top 20
+    get '/top100' do
+      top 100
     end
 
-    get '/top50' do
-      top 50
+    get '/top250' do
+      top 250
     end
 
     get '/about' do
