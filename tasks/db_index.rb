@@ -7,4 +7,4 @@ Bundler.require
 
 require "#{root}/boot"
 
-BceExplorer::Engine.new(root).db_index
+BceExplorer::Engine.start(root).db_index

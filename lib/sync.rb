@@ -23,7 +23,6 @@ module BceExplorer
 
     def sync_info
       @db.info.blocks = @block_count
-      @db.info.money_supply = @be.money_supply
       @db.info.network = @be.network_info
       @db.info.peers = @be.network_peer_info
     end

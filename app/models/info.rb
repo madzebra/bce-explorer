@@ -17,19 +17,13 @@ module BceExplorer
     end
 
     def money_supply
-      result = find 'money_supply'
-      result.nil? ? (10**10).to_f : result['value']
-    end
-
-    def money_supply=(value)
-      query = { _id: 'money_supply' }
-      update = { '$set' => { value: value } }
-      upsert query, update
+      supply = network['moneysupply']
+      supply.nil? ? (10**10).to_f : supply
     end
 
     def network
       result = find 'network_info'
-      result.nil? ? [] : result['info']
+      result.nil? ? {} : result['info']
     end
 
     def network=(info)
