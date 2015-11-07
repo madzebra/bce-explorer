@@ -7,7 +7,11 @@ module BceExplorer
     end
 
     get '/' do
-      haml :home, layout: false
+      if pjax?
+        haml :home_pjax, layout: false
+      else
+        haml :home, layout: false
+      end
     end
 
     get '*' do

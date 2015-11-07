@@ -18,7 +18,7 @@ module BceExplorer
 
     get '/' do
       @blocks = @db.block.last
-      haml :index
+      haml :index, layout: pjax_or_layout
     end
 
     get '/address/:address' do
@@ -26,17 +26,17 @@ module BceExplorer
       if Base58.valid? params['address']
         @address_info = @reports.address.call params['address']
       end
-      haml :address
+      haml :address, layout: pjax_or_layout
     end
 
     get '/block/:blk' do
       @block_info = @reports.block.call params['blk']
-      haml :block
+      haml :block, layout: pjax_or_layout
     end
 
     get '/tx/:txid' do
       @tx_info = @db.tx[params['txid']]
-      haml :tx
+      haml :tx, layout: pjax_or_layout
     end
 
     get '/wallet/:wallet_id' do
@@ -44,7 +44,7 @@ module BceExplorer
       if @db.wallet.exists? params['wallet_id']
         @wallet_info = @db.wallet.fetch params['wallet_id']
       end
-      haml :wallet
+      haml :wallet, layout: pjax_or_layout
     end
 
     get '/search' do
@@ -61,13 +61,13 @@ module BceExplorer
 
     get '/wallets' do
       @wallets = @db.wallet.top
-      haml :wallets
+      haml :wallets, layout: pjax_or_layout
     end
 
     get '/network' do
       @network_info = @db.info.network
       @network_peer = @db.info.peers
-      haml :network
+      haml :network, layout: pjax_or_layout
     end
 
     get '/top100' do
@@ -79,7 +79,11 @@ module BceExplorer
     end
 
     get '/about' do
-      haml :about
+      haml :about, layout: pjax_or_layout
+    end
+
+    get '*' do
+      not_found
     end
 
     private
@@ -87,7 +91,7 @@ module BceExplorer
     def top(count)
       @top = count
       @top_list = @db.richlist.top(count)
-      haml :richlist
+      haml :richlist, layout: pjax_or_layout
     end
   end
 end

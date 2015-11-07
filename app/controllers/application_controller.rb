@@ -6,5 +6,15 @@ module BceExplorer
     set :haml, format: :html5, ugly: true
 
     helpers ApplicationHelper
+
+    private
+
+    def pjax?
+      request.env['HTTP_X_PJAX'] || request['_pjax']
+    end
+
+    def pjax_or_layout
+      pjax? ? :pjax : :layout
+    end
   end
 end
