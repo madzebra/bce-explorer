@@ -3,6 +3,8 @@ module BceExplorer
   class ExplorerController < ApplicationController
     helpers ExplorerHelper
 
+    set :layout_name, :explorer_layout
+
     before do
       @block_count = @db.info.blocks
       @money_supply = @db.info.money_supply
@@ -18,7 +20,7 @@ module BceExplorer
 
     get '/' do
       @blocks = @db.block.last
-      haml :index, layout: pjax_or_layout
+      render_with :index
     end
 
     get '/address/:address' do
@@ -26,17 +28,17 @@ module BceExplorer
       if Base58.valid? params['address']
         @address_info = @reports.address.call params['address']
       end
-      haml :address, layout: pjax_or_layout
+      render_with :address
     end
 
     get '/block/:blk' do
       @block_info = @reports.block.call params['blk']
-      haml :block, layout: pjax_or_layout
+      render_with :block
     end
 
     get '/tx/:txid' do
       @tx_info = @db.tx[params['txid']]
-      haml :tx, layout: pjax_or_layout
+      render_with :tx
     end
 
     get '/wallet/:wallet_id' do
@@ -44,7 +46,7 @@ module BceExplorer
       if @db.wallet.exists? params['wallet_id']
         @wallet_info = @db.wallet.fetch params['wallet_id']
       end
-      haml :wallet, layout: pjax_or_layout
+      render_with :wallet
     end
 
     get '/search' do
@@ -56,18 +58,18 @@ module BceExplorer
           redirect to_address(query) if Base58.valid?(query)
         end
       end
-      haml :search_fail
+      render_with :search_fail
     end
 
     get '/wallets' do
       @wallets = @db.wallet.top
-      haml :wallets, layout: pjax_or_layout
+      render_with :wallets
     end
 
     get '/network' do
       @network_info = @db.info.network
       @network_peer = @db.info.peers
-      haml :network, layout: pjax_or_layout
+      render_with :network
     end
 
     get '/top100' do
@@ -79,7 +81,7 @@ module BceExplorer
     end
 
     get '/about' do
-      haml :about, layout: pjax_or_layout
+      render_with :about
     end
 
     get '*' do
@@ -91,7 +93,7 @@ module BceExplorer
     def top(count)
       @top = count
       @top_list = @db.richlist.top(count)
-      haml :richlist, layout: pjax_or_layout
+      render_with :richlist
     end
   end
 end

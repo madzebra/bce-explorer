@@ -9,48 +9,15 @@
     %link{href: "/vendor/css/flat-ui.min.css", rel: "stylesheet"}
     %link{href: "/style.css", rel: "stylesheet"}
 
-  %body#body-container
-    .navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
-      .navbar-header
-        %button.navbar-toggle{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar-collapse-01"}
-          %span.sr-only Toggle navigation
-        %a.navbar-brand{href: "/"} Block Explorer
+  %body
+    = yield
 
-      .collapse.navbar-collapse#navbar-collapse-01
-        %ul.nav.navbar-nav
-          %li
-            %a{href: url("/")} Blocks
-          %li
-            %a{href: url("/top100")} Richlist
-          %li
-            %a{href: url("/wallets")} Wallets
-          %li
-            %a{href: url("/network")} Network
-          %li
-            %a{href: url("/about")} About
-    .container
-      .row
-        %table{align: "center"}
-          %tr
-            %td
-              %a{href: url("/")}
-                %img.coin-logo{src: "/img/#{coin_tag}.png"}
-            %td{"vertical-align" => "center"}
-              %h2{style: "margin-top: 0"}
-                %a{href: url("/")}= "#{coin_tag}<span class='hidden-xs'> Blockchain</span> Explorer"
-              %p up to block <span id='up-to-block'>#{@block_count}</span>
-
-      .row.text-center#search-row{style:"margin-bottom: 10px"}
-        .col-md-3.col-lg-3
-        .col-xs-12.col-sm-12.col-md-6.col-lg-6
-          %form.form-horizontal#search{role: "search", action: url("/search"), method: "get"}
-            .input-group
-              %input.form-control#searchField{type: "text",  name: "q", placeholder: "Search address, block, transaction"}
-              .input-group-btn
-                %button.btn.btn-default{type: "submit"}
-                  %i.fui-search
-
-      .row= yield
+    .footer
+      .container
+        %p.text-muted
+          2015, <a href="https://github.com/madzebra/bce-explorer">Blockchain Explorer</a> (v.#{BceExplorer::VERSION})
+        %p
+          Bitcoin donations can be sent to <code>14SZqCreNCQgvgB3z9PGEncad9X5xdMfMh</code>
 
     %script{src: "/vendor/js/jquery.min.js"}
     %script{src: "/vendor/js/flat-ui.min.js"}
@@ -58,9 +25,3 @@
     %script
       $(document).pjax('a', '#body-container')
 
-    .footer
-      .container
-        %p.text-muted
-          2015, <a href="https://github.com/madzebra/bce-explorer">Blockchain Explorer</a> (v.#{BceExplorer::VERSION}) for <strong>#{@coin_info['Name'].upcase}</strong>
-        %p
-          Bitcoin donations can be sent to <code>14SZqCreNCQgvgB3z9PGEncad9X5xdMfMh</code>

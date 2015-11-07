@@ -1,4 +1,4 @@
-%body#body-container
+#body-container
   .navbar.navbar-inverse.navbar-fixed-top{role: "navigation"}
     .navbar-header
       %button.navbar-toggle{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar-collapse-01"}
@@ -41,15 +41,3 @@
 
     .row= yield
 
-  %script{src: "/vendor/js/jquery.min.js"}
-  %script{src: "/vendor/js/flat-ui.min.js"}
-  %script{src: "/vendor/js/jquery.pjax.js"}
-  %script
-    $(document).pjax('a', '#body-container')
-
-  .footer
-    .container
-      %p.text-muted
-        2015, <a href="https://github.com/madzebra/bce-explorer">Blockchain Explorer</a> (v.#{BceExplorer::VERSION}) for <strong>#{@coin_info['Name'].upcase}</strong>
-      %p
-        Bitcoin donations can be sent to <code>14SZqCreNCQgvgB3z9PGEncad9X5xdMfMh</code>

@@ -13,8 +13,10 @@ module BceExplorer
       request.env['HTTP_X_PJAX'] || request['_pjax']
     end
 
-    def pjax_or_layout
-      pjax? ? :pjax : :layout
+    def render_with(template_name)
+      haml settings.layout_name, layout: !pjax? do
+        haml template_name
+      end
     end
   end
 end
