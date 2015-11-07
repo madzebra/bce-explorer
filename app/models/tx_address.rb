@@ -7,7 +7,8 @@ module BceExplorer
 
     def <<(info)
       return unless info.keys == [:address, :txid, :type]
-      upsert info, info
+      query = info.reject { |k, _| k == :type }
+      upsert query, info
     end
 
     def count(address)
@@ -18,11 +19,8 @@ module BceExplorer
     def [](address)
       query = { address: address }
       order = { _id: :desc }
-      result = {}
-      find_order_limit(query, order, 50).each do |tx|
-        result[tx['txid']] = tx['type']
-      end
-      result
+      find_order_limit(query, order, 50)
+        .map { |tx| [tx['txid'], tx['type']] }.to_h
     end
   end
 end
