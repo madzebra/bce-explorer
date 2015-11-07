@@ -23,11 +23,8 @@
 
           .col-md-2.col-lg-2
             .pull-right
-              - image = (tx.type == 'in') ? 'red' : 'green'
-              - if tx.type == 'minted'
-                %img{src: "/img/minted.png", title: 'Minted'}
-              - else
-                %img{src: "/img/arrow_#{image}.png", title: 'Sent/Received'}
+              - title = (tx.type == 'minted') ? 'Minted' : 'Transfer'
+              %img{src: "/img/tx_#{tx.type}.png", title: "#{title}"}
 
           .col-md-6.col-lg-6
             %table.tx-detail-table
