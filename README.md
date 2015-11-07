@@ -25,7 +25,7 @@ server {
   listen   80;
   server_name bce.madzebra.co;
 
-  location ~ \.(png|css|ico|jpg|gif|txt) {
+  location ~ \.(png|html|css|js|json|ico|jpg|gif|txt|eot|svg|ttf|woff) {
     root /opt/bce-explorer/public; # FIXME if you have another path
     access_log off;
   }
@@ -41,9 +41,8 @@ server {
 
 ## Dependency
 
-* ruby 2.2 (was tested with 2.2)
-* mongodb (db storage for wallets)
-* redis (cache server)
+* ruby 2.2 (was tested with 2.2.1)
+* mongodb (main db storage)
 
 ## Contributing
 
