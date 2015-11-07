@@ -22,7 +22,7 @@
                   = link_to_address address
 
           .col-md-2.col-lg-2
-            .pull-right
+            .tx-type
               - title = (tx.type == 'minted') ? 'Minted' : 'Transfer'
               %img{src: "/img/tx_#{tx.type}.png", title: "#{title}"}
 
