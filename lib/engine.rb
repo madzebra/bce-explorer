@@ -4,8 +4,12 @@ module BceExplorer
   class Engine
     attr_reader :coins
 
-    def initialize(root)
+    def self.start(root)
       Env.root = root
+      new
+    end
+
+    def initialize
       @coins = {}
       Dir["#{Env.coins_path}/*.yml"].each do |coin_config_file|
         config = Configuration.new coin_config_file

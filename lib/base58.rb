@@ -4,7 +4,7 @@ module BceExplorer
   # Public key also known as address
   # This code was found here:
   # http://rosettacode.org/wiki/Bitcoin/address_validation#Ruby
-  class Base58Check
+  class Base58
     class << self
       #  Nigel_Galloway
       #  October 13th., 2014

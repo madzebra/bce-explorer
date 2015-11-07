@@ -23,7 +23,7 @@ module BceExplorer
 
     get '/address/:address' do
       @address_info = nil
-      if Base58Check.valid? params['address']
+      if Base58.valid? params['address']
         @address_info = @reports.address.call params['address']
       end
       haml :address
@@ -53,7 +53,7 @@ module BceExplorer
         if query.length > 0
           redirect to_tx(query) if @db.tx.valid?(query)
           redirect to_block(query) if @db.block.valid?(query)
-          redirect to_address(query) if Base58Check.valid?(query)
+          redirect to_address(query) if Base58.valid?(query)
         end
       end
       haml :search_fail
