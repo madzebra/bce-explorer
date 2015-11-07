@@ -6,14 +6,8 @@ module BceExplorer
     end
 
     def blocks
-      result = find 'blockcount'
-      result.nil? ? 0 : result['count']
-    end
-
-    def blocks=(count)
-      query = { _id: 'blockcount' }
-      update = { '$set' => { count: count } }
-      upsert query, update
+      count = network['blocks']
+      count.nil? ? 0 : count
     end
 
     def money_supply

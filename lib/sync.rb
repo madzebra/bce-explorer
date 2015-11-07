@@ -7,8 +7,8 @@ module BceExplorer
     end
 
     def sync_db
-      @block_count = @be.block.count
-      ((@db.info.blocks + 1)..@block_count).each do |blk_num|
+      blocks = sync_info
+      (blocks..@db.info.blocks).each do |blk_num|
         block = @be.block(blk_num).decode_with_tx
         @db.block << block
         block['tx'].each_with_index do |tx, i|
@@ -16,15 +16,15 @@ module BceExplorer
           sync_transaction tx, blk_num
         end
       end
-      sync_info
     end
 
     private
 
     def sync_info
-      @db.info.blocks = @block_count
+      blocks = @db.info.blocks
       @db.info.network = @be.network_info
       @db.info.peers = @be.network_peer_info
+      blocks + 1
     end
 
     def sync_transaction(tx, blk_num)
