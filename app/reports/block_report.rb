@@ -8,7 +8,7 @@ module BceExplorer
 
     def call(hash_or_index)
       index = hash_or_index.to_i
-      blk = (index.to_s == hash_or_index) ? hash_or_index : index
+      blk = (index.to_s == hash_or_index) ? index : hash_or_index
       res = @block[blk]
       res.tx.map! do |tx|
         tx_doc = @tx[tx['txid']]
