@@ -22,6 +22,7 @@ module BceExplorer
       @dbh['block'].create_index 'hash'
       @dbh['tx_address'].create_index 'address'
       @dbh['tx_address'].create_index 'txid'
+      @dbh['transaction'].create_index 'txid'
     end
   end
 end
