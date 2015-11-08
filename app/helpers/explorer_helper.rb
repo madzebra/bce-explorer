@@ -48,14 +48,13 @@ module BceExplorer
     end
 
     def time_ago_hours(hours)
-      if hours == 1
+      case hours
+      when 1
         'an hour ago'
+      when 2..24
+        "#{hours} hours ago"
       else
-        if hours < 24
-          "#{hours} hours ago"
-        else
-          time_ago_days(hours / 24)
-        end
+        time_ago_days(hours / 24)
       end
     end
 

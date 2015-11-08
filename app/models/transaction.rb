@@ -17,11 +17,11 @@ module BceExplorer
 
     # get transaction
     def [](txid)
-      doc = find txid
-      doc.nil? ? nil : Entities::Transaction.create_from(doc['tx'])
+      result = find txid
+      Entities::Transaction.create_from(result['tx']) if result
     end
 
-    # fetch list txs
+    # fetch list of txs
     def fetch(txs = {})
       find_all(_id: { '$in' => txs.keys })
         .sort('$natural' => -1)
@@ -34,7 +34,7 @@ module BceExplorer
 
     def valid?(txid)
       return false if txid.length > 100
-      (txid[/\w+/] == txid) && !self[txid].nil?
+      (txid[/\w+/] == txid) && self[txid]
     end
   end
 end

@@ -18,7 +18,7 @@ module BceExplorer
     end
 
     def link_to_tx_short(id)
-      "<a href='#{url("/tx/#{id}")}'>#{shorten_hash(id)}</a>"
+      "<a href='#{url("/tx/#{id}")}'>#{id[0..24]}...</a>"
     end
 
     def link_to(link)

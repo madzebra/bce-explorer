@@ -11,7 +11,6 @@ module BceExplorer
     end
 
     def initialize(coin = nil)
-      fail if coin.nil?
       @db = coin.db
       @coin_info = coin.info
       @reports = Reports.new @db

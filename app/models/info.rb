@@ -7,17 +7,17 @@ module BceExplorer
 
     def blocks
       count = network['blocks']
-      count.nil? ? 0 : count
+      count ? count : 0
     end
 
     def money_supply
       supply = network['moneysupply']
-      supply.nil? ? (10**10).to_f : supply
+      supply ? supply : (10**10).to_f
     end
 
     def network
       result = find 'network_info'
-      result.nil? ? {} : result['info']
+      result ? result['info'] : {}
     end
 
     def network=(info)
@@ -28,7 +28,7 @@ module BceExplorer
 
     def peers
       result = find 'peers_info'
-      result.nil? ? [] : result['info']
+      result ? result['info'] : []
     end
 
     def peers=(info)

@@ -7,7 +7,7 @@ module BceExplorer
 
     def <<(info)
       return unless info.keys == [:address, :txid, :type]
-      query = info.reject { |k, _| k == :type }
+      query = info.reject { |key, _| key == :type }
       upsert query, info
     end
 

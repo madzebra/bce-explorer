@@ -1,15 +1,16 @@
 task default: :sync
 
 namespace :db do
+  LOCKFILE = '/tmp/bce-explorer.lock'
+
   def run_with_lock(script)
-    lockfile = '/tmp/bce-explorer.lock'
-    return if File.exist? lockfile
+    return if File.exist? LOCKFILE
     begin
       mode = ::File::CREAT | ::File::EXCL | ::File::WRONLY
-      File.open(lockfile, mode) { |f| f.write '1' }
+      File.open(LOCKFILE, mode) { |f| f.write '1' }
       ruby script
     ensure
-      File.delete lockfile
+      File.delete LOCKFILE
     end
   end
 

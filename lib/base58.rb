@@ -17,8 +17,8 @@ module BceExplorer
       private
 
       def checksum(hex)
-        b = [hex].pack('H*') # unpack hex
-        Digest::SHA256.hexdigest(Digest::SHA256.digest(b))[0...8]
+        bin = [hex].pack('H*') # unpack hex
+        Digest::SHA256.hexdigest(Digest::SHA256.digest(bin))[0...8]
       end
     end
   end

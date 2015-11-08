@@ -6,14 +6,17 @@
     .panel.panel-default
       .panel-heading
         .row
-          .col-md-8.col-lg-8
-            %strong= link_to_tx tx.txid
-          .col-md-4.col-lg-4
+          .col-md-8.col-lg-8.col-xs-12.col-sm-12
+            .hidden-xs.hidden-sm
+              %strong= link_to_tx tx.txid
+            .hidden-md.hidden-lg
+              %strong= link_to_tx_short tx.txid
+          .col-md-4.col-lg-4.hidden-xs.hidden-sm
             %strong.pull-right= human_time tx.time
 
       .panel-body
         .row
-          .col-md-4.col-lg-4
+          .col-md-4.col-lg-4.hidden-xs.hidden-sm
             - tx.inputs.map { |input| input['address'] }.uniq.each do |address|
               %p
                 - if address.include? "Generation"
@@ -21,12 +24,13 @@
                 - else
                   = link_to_address address
 
-          .col-md-2.col-lg-2
+          .col-md-2.col-lg-2.hidden-xs.hidden-sm
             .tx-type
               - title = (tx.type == 'minted') ? 'Minted' : 'Transfer'
               %img{src: "/img/tx_#{tx.type}.png", title: "#{title}"}
 
-          .col-md-6.col-lg-6
+          - total_output = 0.0
+          .col-md-6.col-lg-6.col-xs-12.col-sm-12
             %table.tx-detail-table
               %tbody
                 - tx.outputs.each do |output|
@@ -36,4 +40,11 @@
                     - else
                       %td
                         = link_to_address output['address']
-                    %td.amount= coin_amount output['value']
+                    %td
+                      .hidden-xs.hidden-sm.amount= coin_amount output['value']
+                      - total_output += output['value']
+
+        .row
+          .col-md-12.col-lg-12.col-xs-12.col-sm-12
+            .pull-right
+              %button.btn.btn-lg.btn-primary= coin_amount total_output

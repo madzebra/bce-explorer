@@ -24,7 +24,7 @@ module BceExplorer
     # get address balance
     def [](address)
       result = find address
-      balance = result['balance'] unless result.nil?
+      balance = result['balance'] if result
       # this code for situations when address document exists
       # but has no 'balance' property yet, because wallet upserted it
       balance || 0.0
@@ -38,20 +38,20 @@ module BceExplorer
     end
 
     def fetch(address)
-      doc = find address
-      doc.nil? ? nil : Entities::Address.create_from(doc)
+      result = find address
+      Entities::Address.create_from(result) if result
     end
 
     def exists?(address)
-      !find(address).nil?
+      find(address)
     end
 
     private
 
     def do_update(param, address, value)
-      doc = find address
-      return if doc.nil?
-      new_value = (doc[param] || 0.0) + value
+      result = find address
+      return unless result
+      new_value = (result[param] || 0.0) + value
       query = { _id: address }
       change = { '$set' => { param => new_value } }
       update query, change

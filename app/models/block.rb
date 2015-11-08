@@ -23,15 +23,16 @@ module BceExplorer
                when hash_or_index.is_a?(Integer) then find hash_or_index
                end
 
-      result.nil? ? nil : Entities::Block.create_from(result['block'])
+      Entities::Block.create_from(result['block']) if result
     end
 
     def valid?(hash_or_index)
       return false if hash_or_index.length > 100
-      if hash_or_index.to_i.to_s == hash_or_index
-        !self[hash_or_index.to_i].nil?
+      block_index = hash_or_index.to_i
+      if block_index.to_s == hash_or_index
+        self[block_index]
       elsif hash_or_index[/\w+/] == hash_or_index
-        !self[hash_or_index].nil?
+        self[hash_or_index]
       else
         false
       end

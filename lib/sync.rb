@@ -9,22 +9,26 @@ module BceExplorer
     def sync_db
       blocks = sync_info
       (blocks..@db.info.blocks).each do |blk_num|
-        block = @be.block(blk_num).decode_with_tx
-        @db.block << block
-        block['tx'].each_with_index do |tx, i|
-          tx['type'] = calc_tx_type block, i
-          sync_transaction tx, blk_num
-        end
+        sync_block @be.block(blk_num).decode_with_tx
       end
     end
 
     private
 
     def sync_info
-      blocks = @db.info.blocks
-      @db.info.network = @be.network_info
-      @db.info.peers = @be.network_peer_info
+      info = @db.info
+      blocks = info.blocks
+      info.network = @be.network_info
+      info.peers = @be.network_peer_info
       blocks + 1
+    end
+
+    def sync_block(block)
+      @db.block << block
+      block['tx'].each_with_index do |tx, index|
+        tx['type'] = calc_tx_type block, index
+        sync_transaction tx, block['height']
+      end
     end
 
     def sync_transaction(tx, blk_num)
@@ -56,10 +60,11 @@ module BceExplorer
     end
 
     def sync_wallets(tx)
-      @db.wallet.merge! extract_addresses_from(tx['inputs'])
+      wallets = @db.wallet
+      wallets.merge extract_addresses_from(tx['inputs'])
 
       extract_addresses_from(tx['outputs'])
-        .each { |address| @db.wallet.merge! address }
+        .each { |address| wallets.merge address }
     end
 
     def extract_addresses_from(source)
@@ -76,8 +81,8 @@ module BceExplorer
       address.include? 'Generation'
     end
 
-    def calc_tx_type(block, i)
-      if ((block['flags'].include? 'stake') && (i < 2)) || (i < 1)
+    def calc_tx_type(block, index)
+      if ((block['flags'].include? 'stake') && (index < 2)) || (index < 1)
         'minted'
       else
         'out'
