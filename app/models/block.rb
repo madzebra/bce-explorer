@@ -11,9 +11,7 @@ module BceExplorer
 
     # add block to db
     def <<(block)
-      query = { _id: block['height'] }
-      update = { '$set' => { hash: block['hash'], block: block } }
-      upsert query, update
+      save _id: block['height'], hash: block['hash'], block: block
     end
 
     # get block by index or by hash string
@@ -24,6 +22,12 @@ module BceExplorer
                end
 
       Entities::Block.create_from(result['block']) if result
+    end
+
+    def update(block)
+      query = { _id: block['height'] }
+      update = { '$set' => { hash: block['hash'], block: block } }
+      super query, update
     end
 
     def valid?(hash_or_index)

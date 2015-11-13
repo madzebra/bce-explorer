@@ -37,6 +37,10 @@ module BceExplorer
         .limit(limit)
     end
 
+    def save(document)
+      @col.save document
+    end
+
     def update(query, update)
       @col.update query, update
     end

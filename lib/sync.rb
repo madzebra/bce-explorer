@@ -8,8 +8,10 @@ module BceExplorer
 
     def sync_db
       blocks = sync_info
+      prev_block = @be.block(blocks - 1).decode
+      @db.block.update(prev_block) if blocks > 1
       (blocks..@db.info.blocks).each do |blk_num|
-        sync_block @be.block(blk_num).decode_with_tx
+        sync_block @be.block(blk_num).decode
       end
     end
 
