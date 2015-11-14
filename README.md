@@ -44,6 +44,10 @@ server {
 * ruby 2.2 (was tested with 2.2.1)
 * mongodb (main db storage)
 
+## Tasks
+* rake db:sync (to sync db, better to run with cron every minute)
+* rake db:index (to create index for speeeeeed, run once after initial sync)
+
 ## Contributing
 
 1. Fork it ( https://github.com/madzebra/bce-explorer/fork )
