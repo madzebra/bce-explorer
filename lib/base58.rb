@@ -8,7 +8,9 @@ module BceExplorer
       ALPHA = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
       def valid?(address)
-        sum = address.chars.inject(0) { |a, e| a * 58 + ALPHA.index(e) }.to_s 16
+        address_ary = address.chars
+        return false unless address_ary.all? { |c| ALPHA.include?(c) }
+        sum = address_ary.inject(0) { |a, e| a * 58 + ALPHA.index(e) }.to_s 16
         hex = sum.slice!(0..-9)
         (hex.length...42).each { hex.insert(0, '0') }
         checksum(hex) == sum
